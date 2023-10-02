@@ -1,3 +1,5 @@
+use html_escape::encode_safe;
+use html_minifier::minify;
 use serde::{Deserialize, Serialize};
 use sqids::Sqids;
 use url::Url;
@@ -64,7 +66,7 @@ pub async fn handle_redirect<D>(_req: Request, ctx: RouteContext<D>) -> worker::
       }
       _ => (String::new(), String::new(), String::new(), String::new()),
     };
-    
+
     let html_doc = format!(
       r#"
         <!DOCTYPE html>
@@ -73,31 +75,74 @@ pub async fn handle_redirect<D>(_req: Request, ctx: RouteContext<D>) -> worker::
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+            <meta property="og:site_name" content="Lil Nouns">
             <meta property="og:url" content="{}">
             <meta property="og:type" content="website">
             <meta property="og:title" content="{}">
             <meta property="og:description" content="{}">
-            <meta property="og:image" content="{}">
 
-            <meta http-equiv="refresh" content="5; url={}" />
+            <meta property="og:image" content="{}">
+            <meta property="og:image:secure_url" content="{}" />
+            <meta property="og:image:type" content="image/png" />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:image:alt" content="{}" />
+
+            <meta name="twitter:card" content="summary_large_image">
+            <meta property="twitter:domain" content="lilnouns.click">
+            <meta property="twitter:url" content="{}">
+            <meta name="twitter:title" content="{}">
+            <meta name="twitter:description" content="{}">
+            <meta name="twitter:image" content="{}">
+
+            <meta http-equiv="refresh" content="3; url={}" />
 
             <title>{}</title>
             <meta name="description" content="{}">
+
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap" rel="stylesheet">
         </head>
-        <body style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0;">
+        <body style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; font-family: 'Londrina Solid', cursive;">
             <div style="text-align: center;">
                 <div style="padding: 20px;">
-                    <img src="https://lilnouns.wtf/static/media/lil-loading-skull.b7a846e1.gif" alt="Loading Skull" style="width: 300px; height: 300px;">
+                    <img src="https://lilnouns.wtf/static/media/lil-loading-skull.b7a846e1.gif" alt="Loading Skull" style="width: 192px; height: 192px;">
                     <p style="margin-top: 10px; font-size: 24px; font-weight: bold;">Redirecting...</p>
+                    <p><a style="font-size: 24px; text-decoration: none;" href="{}">{}</a></p>
                 </div>
             </div>
         </body>
         </html>
     "#,
-      url, title, description, image, url, title, description
+      url,
+      encode_safe(&title),
+      encode_safe(&description),
+      image,
+      image,
+      encode_safe(&title),
+      url,
+      encode_safe(&title),
+      encode_safe(&description),
+      image,
+      url,
+      encode_safe(&title),
+      encode_safe(&description),
+      url,
+      encode_safe(&title),
     );
 
-    return Response::from_body(ResponseBody::Body(html_doc.as_bytes().to_vec()));
+    let minified_html = minify(html_doc).expect("Failed to minify HTML");
+
+    let response = Response::from_body(ResponseBody::Body(minified_html.as_bytes().to_vec()));
+
+    return match response {
+      Ok(mut res) => {
+        res.headers_mut().set("Content-Type", "text/html").unwrap();
+        return Ok(res);
+      }
+      Err(e) => Err(e),
+    };
   }
 
   Response::error("Bad Request", 400)
@@ -150,8 +195,8 @@ pub async fn handle_creation<D>(
           .collect();
 
         if segments[0] == "idea" {
-          numbers.push(LilNouns as u64);
           numbers.push(PropLot as u64);
+          numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
         } else {
           return Response::error("Bad Request", 400);
         }

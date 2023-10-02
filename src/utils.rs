@@ -1,6 +1,6 @@
+use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use regex::Regex;
 use unidecode::unidecode;
-use urlencoding::encode;
 
 pub fn truncate_and_clean_string(input: &str, limit: usize) -> String {
   // Check if the first line contains "#"
@@ -51,37 +51,39 @@ pub fn truncate_and_clean_string(input: &str, limit: usize) -> String {
   }
 }
 
-pub fn create_og_image(title: &str, meta: &str) -> String {
-  let cloudinary_id = "nekofar"; // Add your Cloudinary account ID here
-  let mut url = format!("https://res.cloudinary.com/{}/image/upload", cloudinary_id);
+pub fn create_og_image(title: &str, description: &str) -> String {
+  let non_alpha_numeric = Regex::new("[^a-zA-Z0-9 .]").unwrap();
 
-  url.push_str("/b_rgb:D4D7E1");
+  let title = non_alpha_numeric.replace_all(title, "");
+  let description = non_alpha_numeric.replace_all(description, "");
 
-  // Composed Image Transformations
-  url.push_str("/w_1200,h_630,q_100");
+  let cloudinary_id = "nekofar";
+  let cloudinary_url = format!("https://res.cloudinary.com/{}/image/upload", cloudinary_id);
 
-  // TITLE
-  // Google font
-  url.push_str(&format!(
-    "/l_text:{}_60_bold:{},co_rgb:000000,c_fit,w_1100,h_200",
-    encode("Londrina Solid"), encode(title)
-  ));
+  let title_encoded = format!(
+    "/l_text:{}_60_bold:{},co_rgb:000000,c_fit,w_1000,h_200",
+    utf8_percent_encode("Londrina Solid", NON_ALPHANUMERIC),
+    utf8_percent_encode(&title, NON_ALPHANUMERIC)
+  );
 
-  // Positioning
-  url.push_str("/fl_layer_apply,g_south_west,x_50,y_210");
+  let description_encoded = format!(
+    "/l_text:{}_40:{},co_rgb:00000080,c_fit,w_1000",
+    utf8_percent_encode("Londrina Solid", NON_ALPHANUMERIC),
+    utf8_percent_encode(&description, NON_ALPHANUMERIC)
+  );
 
-  // META
-  // Same font, but smaller
-  url.push_str(&format!(
-    "/l_text:{}_40:{},co_rgb:00000080,c_fit,w_1100",
-    encode("Londrina Solid"), encode(meta)
-  ));
+  let parts = vec![
+    &cloudinary_url,
+    "/b_rgb:D4D7E1",
+    "/c_scale,h_630,w_1200",
+    "/l_black_noggle/c_scale,w_300/e_screen,fl_layer_apply,g_north",
+    &title_encoded,
+    "/fl_layer_apply,g_south_west,x_100,y_230",
+    &description_encoded,
+    "/fl_layer_apply,g_south_west,x_100,y_70",
+    "/f_auto,q_auto:eco",
+    "/blank.png",
+  ];
 
-  // Positioning
-  url.push_str("/fl_layer_apply,g_south_west,x_50,y_70");
-
-  // BG
-  url.push_str("/blank.png");
-
-  url
+  parts.join("")
 }
