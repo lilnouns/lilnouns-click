@@ -467,9 +467,9 @@ dependencies = [
 
 [[package]]
 name = "html-minifier"
-version = "4.0.0"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "18f74036e4be1b97eaf78bcf795d55002eccf613d5c4705bf78d3b92649ab00f"
+checksum = "cb8f62e1c8ee7bbdda853aebbbfb78b75a549a45ab031665a5da07a1579a1ad8"
 dependencies = [
  "cow-utils",
  "educe",
@@ -651,9 +651,9 @@ checksum = "6877bb514081ee2a7ff5ef9de3281f14a4dd4bceac4c09388074a6b5df8a139a"
 
 [[package]]
 name = "minifier"
-version = "0.2.2"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8eb022374af2f446981254e6bf9efb6e2c9e1a53176d395fca02792fd4435729"
+checksum = "95bbbf96b9ac3482c2a25450b67a15ed851319bc5fabf3b40742ea9066e84282"
 
 [[package]]
 name = "miniz_oxide"
