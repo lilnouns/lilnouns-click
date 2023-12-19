@@ -1,6 +1,6 @@
 [package]
 name = "lilnouns-click"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["Milad Nekofar <milad@nekofar.com>"]
 edition = "2021"
 description = "A Nounish URL shortener for LilNouns DAO."
@@ -18,11 +18,11 @@ crate-type = ["cdylib"]
 [dependencies]
 graphql_client = { version = "0.13.0", features = ["reqwest"] }
 html-escape = { version = "0.2.13", default-features = false }
-html-minifier = { version = "4.0.0", default-features = false }
+html-minifier = { version = "5.0.0", default-features = false }
 log = { version = "0.4.20", features = [] }
 percent-encoding = "2.3.1"
 regex = "1.10.2"
-reqwest = "0.11.22"
+reqwest = "0.11.23"
 serde = { version = "1.0.193", features = ["derive"] }
 sqids = "0.3.0"
 unidecode = "0.3.0"
