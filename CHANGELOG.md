@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.4] - 2024-01-08
+
+### Documentation
+
+- Update README with new badges
+- Add a new badge for wakatime to the readme file
+
 ## [1.0.3] - 2023-12-27
 
 ### Bug Fixes
