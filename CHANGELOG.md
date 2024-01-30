@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.0] - 2024-01-30
+
+### Features
+
+- Add base meta tags for support Fracaster frames
+
+### Refactor
+
+- Update `handle_redirect` to improve code readability
+
 ## [1.0.5] - 2024-01-21
 
 ### Bug Fixes
