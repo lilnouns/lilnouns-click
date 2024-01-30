@@ -114,6 +114,11 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
             <meta name="twitter:description" content="{}">
             <meta name="twitter:image" content="{}">
 
+            <meta property="fc:frame" content="vNext" />
+            <meta property="fc:frame:image" content="{}" />
+            <meta property="fc:frame:button:1" content="{}" />
+            <meta property="fc:frame:post_url" content="{}" />
+
             <meta http-equiv="refresh" content="3; url={}" />
 
             <title>{}</title>
@@ -144,6 +149,9 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
       encode_safe(&title),       // Twitter Title
       encode_safe(&description), // Twitter Description
       image,                     // Twitter Image
+      image,                     // Farcaster Image
+      "Show Result",             // Farcaster Button #1
+      url,                       // Farcaster Post URL
       url,                       // Page Refresh URL
       encode_safe(&title),       // Page Title
       encode_safe(&description), // Page Description
