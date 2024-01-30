@@ -336,3 +336,84 @@ pub async fn handle_creation<D>(
 
   Response::error("Bad Request", 400)
 }
+
+pub async fn handle_fs_result<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
+  if let Some(sqid) = ctx.param("sqid") {
+    let sqids = Sqids::default();
+    let numbers = sqids.decode(&sqid);
+
+    let community = match numbers[0] {
+      1 => Some(LilNouns),
+      _ => None,
+    };
+
+    let platform = match numbers[1] {
+      1 => Some(Ethereum),
+      2 => Some(PropLot),
+      3 => Some(MetaGov),
+      _ => None,
+    };
+
+    let (image) = match (community, platform) {
+      (Some(LilNouns), Some(Ethereum)) => {
+        let image = req
+          .url()
+          .unwrap()
+          .join(format!("{}/og.png", sqid).as_str())
+          .unwrap()
+          .to_string();
+        (image)
+      }
+      (Some(LilNouns), Some(PropLot)) => {
+        let image = req
+          .url()
+          .unwrap()
+          .join(format!("{}/og.png", sqid).as_str())
+          .unwrap()
+          .to_string();
+        (image)
+      }
+      (Some(LilNouns), Some(MetaGov)) => {
+        let image = req
+          .url()
+          .unwrap()
+          .join(format!("{}/og.png", sqid).as_str())
+          .unwrap()
+          .to_string();
+        (image)
+      }
+      _ => (String::new()),
+    };
+
+    let html_doc = format!(
+      r#"
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta property="fc:frame" content="vNext" />
+            <meta property="fc:frame:image" content="{}" />
+            <meta property="fc:frame:button:1" content="{}" />
+            <meta property="fc:frame:post_url" content="{}" />
+        </head>
+        </html>
+    "#,
+      image,                       // Farcaster Image
+      "Show Result",               // Farcaster Button #1
+      req.url().unwrap().as_str(), // Farcaster Post URL
+    );
+
+    let minified_html = minify(html_doc).expect("Failed to minify HTML");
+
+    let response = Response::from_body(ResponseBody::Body(minified_html.as_bytes().to_vec()));
+
+    return match response {
+      Ok(mut res) => {
+        res.headers_mut().set("Content-Type", "text/html").unwrap();
+        return Ok(res);
+      }
+      Err(e) => Err(e),
+    };
+  }
+
+  Response::error("Bad Request", 400)
+}
