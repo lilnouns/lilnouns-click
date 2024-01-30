@@ -139,24 +139,24 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         </body>
         </html>
     "#,
-      url,                       // OpenGraph URL
-      encode_safe(&title),       // OpenGraph Title
-      encode_safe(&description), // OpenGraph Description
-      image,                     // OpenGraph Image URL
-      image,                     // OpenGraph Image Secure URL
-      encode_safe(&title),       // OpenGraph Image Alt
-      url,                       // Twitter URL
-      encode_safe(&title),       // Twitter Title
-      encode_safe(&description), // Twitter Description
-      image,                     // Twitter Image
-      image,                     // Farcaster Image
-      "Show Result",             // Farcaster Button #1
-      url,                       // Farcaster Post URL
-      url,                       // Page Refresh URL
-      encode_safe(&title),       // Page Title
-      encode_safe(&description), // Page Description
-      url,                       // Page Content Link URL
-      encode_safe(&title),       // Page Content Link Title
+      url,                         // OpenGraph URL
+      encode_safe(&title),         // OpenGraph Title
+      encode_safe(&description),   // OpenGraph Description
+      image,                       // OpenGraph Image URL
+      image,                       // OpenGraph Image Secure URL
+      encode_safe(&title),         // OpenGraph Image Alt
+      url,                         // Twitter URL
+      encode_safe(&title),         // Twitter Title
+      encode_safe(&description),   // Twitter Description
+      image,                       // Twitter Image
+      image,                       // Farcaster Image
+      "Show Result",               // Farcaster Button #1
+      req.url().unwrap().as_str(), // Farcaster Post URL
+      url,                         // Page Refresh URL
+      encode_safe(&title),         // Page Title
+      encode_safe(&description),   // Page Description
+      url,                         // Page Content Link URL
+      encode_safe(&title),         // Page Content Link Title
     );
 
     let minified_html = minify(html_doc).expect("Failed to minify HTML");
