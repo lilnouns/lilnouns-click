@@ -134,21 +134,21 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         </body>
         </html>
     "#,
-      url,
-      encode_safe(&title),
-      encode_safe(&description),
-      image,
-      image,
-      encode_safe(&title),
-      url,
-      encode_safe(&title),
-      encode_safe(&description),
-      image,
-      url,
-      encode_safe(&title),
-      encode_safe(&description),
-      url,
-      encode_safe(&title),
+      url,                       // OpenGraph URL
+      encode_safe(&title),       // OpenGraph Title
+      encode_safe(&description), // OpenGraph Description
+      image,                     // OpenGraph Image URL
+      image,                     // OpenGraph Image Secure URL
+      encode_safe(&title),       // OpenGraph Image Alt
+      url,                       // Twitter URL
+      encode_safe(&title),       // Twitter Title
+      encode_safe(&description), // Twitter Description
+      image,                     // Twitter Image
+      url,                       // Page Refresh URL
+      encode_safe(&title),       // Page Title
+      encode_safe(&description), // Page Description
+      url,                       // Page Content Link URL
+      encode_safe(&title),       // Page Content Link Title
     );
 
     let minified_html = minify(html_doc).expect("Failed to minify HTML");
