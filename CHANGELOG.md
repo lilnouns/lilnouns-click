@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.1]] - 2024-02-22
+
+### Features
+
+- Add UTM parameters to the final URLs
+
+### Bug Fixes
+
+- Update post url for Farcaster frames
+
+### Miscellaneous Tasks
+
+- Add new git flow workflow for handling pull requests
+
 ## [1.1.0-alpha.0] - 2024-01-30
 
 ### Features
