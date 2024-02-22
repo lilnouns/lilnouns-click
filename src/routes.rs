@@ -51,7 +51,11 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
 
     let (url, title, description, image) = match (community, platform) {
       (Some(LilNouns), Some(Ethereum)) => {
-        let url = format!("{}/{}", "https://lilnouns.wtf/vote", numbers[2]);
+        let url = format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
+           utm_content=proposal_{}",
+          "https://lilnouns.wtf/vote", numbers[2], numbers[2]
+        );
         let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
         let image = req
           .url()
@@ -62,7 +66,10 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         (url, title, description, image)
       }
       (Some(LilNouns), Some(PropLot)) => {
-        let url = format!("{}/{}", "https://lilnouns.proplot.wtf/idea", numbers[2]);
+        let url = format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=proplot&utm_content=idea_{}",
+          "https://lilnouns.proplot.wtf/idea", numbers[2], numbers[2]
+        );
         let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
         let image = req
           .url()
@@ -73,7 +80,11 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         (url, title, description, image)
       }
       (Some(LilNouns), Some(MetaGov)) => {
-        let url = format!("{}/{}", "https://lilnouns.wtf/vote/nounsdao", numbers[2]);
+        let url = format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=metagov&\
+           utm_content=proposal_{}",
+          "https://lilnouns.wtf/vote/nounsdao", numbers[2], numbers[2]
+        );
         let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
         let image = req
           .url()
