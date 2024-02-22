@@ -6,99 +6,99 @@ use url::Url;
 use worker::{Request, Response, ResponseBody, RouteContext};
 
 use crate::{
-    queries::{fetch_lil_nouns_data, fetch_meta_gov_data, fetch_prop_lot_data},
-    routes::{
-        Community::LilNouns,
-        Platform::{Ethereum, MetaGov, PropLot},
-    },
-    utils::create_og_image,
+  queries::{fetch_lil_nouns_data, fetch_meta_gov_data, fetch_prop_lot_data},
+  routes::{
+    Community::LilNouns,
+    Platform::{Ethereum, MetaGov, PropLot},
+  },
+  utils::create_og_image,
 };
 
 #[derive(Debug, Serialize, Deserialize)]
 struct UrlPayload {
-    pub url: String,
-    pub sqid: Option<String>,
+  pub url: String,
+  pub sqid: Option<String>,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Community {
-    LilNouns = 1,
+  LilNouns = 1,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Platform {
-    Ethereum = 1,
-    PropLot = 2,
-    MetaGov = 3,
+  Ethereum = 1,
+  PropLot = 2,
+  MetaGov = 3,
 }
 
 pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
-    if let Some(sqid) = ctx.param("sqid") {
-        let sqids = Sqids::default();
-        let numbers = sqids.decode(&sqid);
+  if let Some(sqid) = ctx.param("sqid") {
+    let sqids = Sqids::default();
+    let numbers = sqids.decode(&sqid);
 
-        let community = match numbers[0] {
-            1 => Some(LilNouns),
-            _ => None,
-        };
+    let community = match numbers[0] {
+      1 => Some(LilNouns),
+      _ => None,
+    };
 
-        let platform = match numbers[1] {
-            1 => Some(Ethereum),
-            2 => Some(PropLot),
-            3 => Some(MetaGov),
-            _ => None,
-        };
+    let platform = match numbers[1] {
+      1 => Some(Ethereum),
+      2 => Some(PropLot),
+      3 => Some(MetaGov),
+      _ => None,
+    };
 
-        let (url, title, description, image) = match (community, platform) {
-            (Some(LilNouns), Some(Ethereum)) => {
-                let url = format!(
-                    "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
+    let (url, title, description, image) = match (community, platform) {
+      (Some(LilNouns), Some(Ethereum)) => {
+        let url = format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
            utm_content=proposal_{}",
-                    "https://lilnouns.wtf/vote", numbers[2], numbers[2]
-                );
-                let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-                let image = req
-                    .url()
-                    .unwrap()
-                    .join(format!("{}/og.png", sqid).as_str())
-                    .unwrap()
-                    .to_string();
-                (url, title, description, image)
-            }
-            (Some(LilNouns), Some(PropLot)) => {
-                let url = format!(
-                    "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=proplot&utm_content=idea_{}",
-                    "https://lilnouns.proplot.wtf/idea", numbers[2], numbers[2]
-                );
-                let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
-                let image = req
-                    .url()
-                    .unwrap()
-                    .join(format!("{}/og.png", sqid).as_str())
-                    .unwrap()
-                    .to_string();
-                (url, title, description, image)
-            }
-            (Some(LilNouns), Some(MetaGov)) => {
-                let url = format!(
-                    "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=metagov&\
+          "https://lilnouns.wtf/vote", numbers[2], numbers[2]
+        );
+        let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
+        let image = req
+          .url()
+          .unwrap()
+          .join(format!("{}/og.png", sqid).as_str())
+          .unwrap()
+          .to_string();
+        (url, title, description, image)
+      }
+      (Some(LilNouns), Some(PropLot)) => {
+        let url = format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=proplot&utm_content=idea_{}",
+          "https://lilnouns.proplot.wtf/idea", numbers[2], numbers[2]
+        );
+        let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
+        let image = req
+          .url()
+          .unwrap()
+          .join(format!("{}/og.png", sqid).as_str())
+          .unwrap()
+          .to_string();
+        (url, title, description, image)
+      }
+      (Some(LilNouns), Some(MetaGov)) => {
+        let url = format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=metagov&\
            utm_content=proposal_{}",
-                    "https://lilnouns.wtf/vote/nounsdao", numbers[2], numbers[2]
-                );
-                let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
-                let image = req
-                    .url()
-                    .unwrap()
-                    .join(format!("{}/og.png", sqid).as_str())
-                    .unwrap()
-                    .to_string();
-                (url, title, description, image)
-            }
-            _ => (String::new(), String::new(), String::new(), String::new()),
-        };
+          "https://lilnouns.wtf/vote/nounsdao", numbers[2], numbers[2]
+        );
+        let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
+        let image = req
+          .url()
+          .unwrap()
+          .join(format!("{}/og.png", sqid).as_str())
+          .unwrap()
+          .to_string();
+        (url, title, description, image)
+      }
+      _ => (String::new(), String::new(), String::new(), String::new()),
+    };
 
-        let html_doc = format!(
-            r#"
+    let html_doc = format!(
+      r#"
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -150,142 +150,142 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         </body>
         </html>
     "#,
-            url,                         // OpenGraph URL
-            encode_safe(&title),         // OpenGraph Title
-            encode_safe(&description),   // OpenGraph Description
-            image,                       // OpenGraph Image URL
-            image,                       // OpenGraph Image Secure URL
-            encode_safe(&title),         // OpenGraph Image Alt
-            url,                         // Twitter URL
-            encode_safe(&title),         // Twitter Title
-            encode_safe(&description),   // Twitter Description
-            image,                       // Twitter Image
-            image,                       // Farcaster Image
-            "Show Result",               // Farcaster Button #1
-            req.url().unwrap().as_str(), // Farcaster Post URL
-            url,                         // Page Refresh URL
-            encode_safe(&title),         // Page Title
-            encode_safe(&description),   // Page Description
-            url,                         // Page Content Link URL
-            encode_safe(&title),         // Page Content Link Title
-        );
+      url,                         // OpenGraph URL
+      encode_safe(&title),         // OpenGraph Title
+      encode_safe(&description),   // OpenGraph Description
+      image,                       // OpenGraph Image URL
+      image,                       // OpenGraph Image Secure URL
+      encode_safe(&title),         // OpenGraph Image Alt
+      url,                         // Twitter URL
+      encode_safe(&title),         // Twitter Title
+      encode_safe(&description),   // Twitter Description
+      image,                       // Twitter Image
+      image,                       // Farcaster Image
+      "Show Result",               // Farcaster Button #1
+      req.url().unwrap().as_str(), // Farcaster Post URL
+      url,                         // Page Refresh URL
+      encode_safe(&title),         // Page Title
+      encode_safe(&description),   // Page Description
+      url,                         // Page Content Link URL
+      encode_safe(&title),         // Page Content Link Title
+    );
 
-        let minified_html = minify(html_doc).expect("Failed to minify HTML");
+    let minified_html = minify(html_doc).expect("Failed to minify HTML");
 
-        let response = Response::from_body(ResponseBody::Body(minified_html.as_bytes().to_vec()));
+    let response = Response::from_body(ResponseBody::Body(minified_html.as_bytes().to_vec()));
 
-        return match response {
-            Ok(mut res) => {
-                res.headers_mut().set("Content-Type", "text/html").unwrap();
-                return Ok(res);
-            }
-            Err(e) => Err(e),
-        };
-    }
+    return match response {
+      Ok(mut res) => {
+        res.headers_mut().set("Content-Type", "text/html").unwrap();
+        return Ok(res);
+      }
+      Err(e) => Err(e),
+    };
+  }
 
-    Response::error("Bad Request", 400)
+  Response::error("Bad Request", 400)
 }
 
 pub async fn handle_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
-    if let Some(sqid) = ctx.param("sqid") {
-        let sqids = Sqids::default();
-        let numbers = sqids.decode(&sqid);
+  if let Some(sqid) = ctx.param("sqid") {
+    let sqids = Sqids::default();
+    let numbers = sqids.decode(&sqid);
 
-        let community = match numbers[0] {
-            1 => Some(LilNouns),
-            _ => None,
-        };
+    let community = match numbers[0] {
+      1 => Some(LilNouns),
+      _ => None,
+    };
 
-        let platform = match numbers[1] {
-            1 => Some(Ethereum),
-            2 => Some(PropLot),
-            3 => Some(MetaGov),
-            _ => None,
-        };
+    let platform = match numbers[1] {
+      1 => Some(Ethereum),
+      2 => Some(PropLot),
+      3 => Some(MetaGov),
+      _ => None,
+    };
 
-        let image = match (community, platform) {
-            (Some(LilNouns), Some(Ethereum)) => {
-                let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-                create_og_image(&title, &description, "7CC4F2")
-            }
-            (Some(LilNouns), Some(PropLot)) => {
-                let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
-                create_og_image(&title, &description, "8C8D92")
-            }
-            (Some(LilNouns), Some(MetaGov)) => {
-                let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
-                create_og_image(&title, &description, "EFC950")
-            }
-            _ => String::new(),
-        };
+    let image = match (community, platform) {
+      (Some(LilNouns), Some(Ethereum)) => {
+        let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
+        create_og_image(&title, &description, "7CC4F2")
+      }
+      (Some(LilNouns), Some(PropLot)) => {
+        let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
+        create_og_image(&title, &description, "8C8D92")
+      }
+      (Some(LilNouns), Some(MetaGov)) => {
+        let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
+        create_og_image(&title, &description, "EFC950")
+      }
+      _ => String::new(),
+    };
 
-        return Response::redirect(Url::parse(&*image)?);
-    }
+    return Response::redirect(Url::parse(&*image)?);
+  }
 
-    Response::error("Bad Request", 400)
+  Response::error("Bad Request", 400)
 }
 
 pub async fn handle_creation<D>(
-    mut req: Request,
-    _ctx: RouteContext<D>,
+  mut req: Request,
+  _ctx: RouteContext<D>,
 ) -> worker::Result<Response> {
-    let sqids = Sqids::default();
-    let mut numbers: Vec<u64> = Vec::new();
+  let sqids = Sqids::default();
+  let mut numbers: Vec<u64> = Vec::new();
 
-    if let Ok(payload) = req.json::<UrlPayload>().await {
-        let url = Url::parse(&*payload.url).expect("Invalid URL");
+  if let Ok(payload) = req.json::<UrlPayload>().await {
+    let url = Url::parse(&*payload.url).expect("Invalid URL");
 
-        return match url.host_str() {
-            Some("lilnouns.wtf") | Some("www.lilnouns.wtf") => {
-                let segments: Vec<_> = url
-                    .path_segments()
-                    .expect("Cannot get path segments")
-                    .filter(|segment| !segment.is_empty())
-                    .collect();
+    return match url.host_str() {
+      Some("lilnouns.wtf") | Some("www.lilnouns.wtf") => {
+        let segments: Vec<_> = url
+          .path_segments()
+          .expect("Cannot get path segments")
+          .filter(|segment| !segment.is_empty())
+          .collect();
 
-                if segments.is_empty() || segments[0] != "vote" {
-                    return Response::error("Bad Request", 400);
-                }
+        if segments.is_empty() || segments[0] != "vote" {
+          return Response::error("Bad Request", 400);
+        }
 
-                if segments[1] == "nounsdao" {
-                    numbers.push(LilNouns as u64);
-                    numbers.push(MetaGov as u64);
-                    numbers.push(segments[2].parse::<u32>().unwrap().try_into().unwrap());
-                } else {
-                    numbers.push(LilNouns as u64);
-                    numbers.push(Ethereum as u64);
-                    numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
-                }
+        if segments[1] == "nounsdao" {
+          numbers.push(LilNouns as u64);
+          numbers.push(MetaGov as u64);
+          numbers.push(segments[2].parse::<u32>().unwrap().try_into().unwrap());
+        } else {
+          numbers.push(LilNouns as u64);
+          numbers.push(Ethereum as u64);
+          numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
+        }
 
-                Response::from_json(&UrlPayload {
-                    url: url.into(),
-                    sqid: Some(sqids.encode(&*numbers).unwrap()),
-                })
-            }
-            Some("lilnouns.proplot.wtf") | Some("www.lilnouns.proplot.wtf") => {
-                numbers.push(LilNouns as u64);
+        Response::from_json(&UrlPayload {
+          url: url.into(),
+          sqid: Some(sqids.encode(&*numbers).unwrap()),
+        })
+      }
+      Some("lilnouns.proplot.wtf") | Some("www.lilnouns.proplot.wtf") => {
+        numbers.push(LilNouns as u64);
 
-                let segments: Vec<_> = url
-                    .path_segments()
-                    .expect("Cannot get path segments")
-                    .filter(|segment| !segment.is_empty())
-                    .collect();
+        let segments: Vec<_> = url
+          .path_segments()
+          .expect("Cannot get path segments")
+          .filter(|segment| !segment.is_empty())
+          .collect();
 
-                if segments[0] == "idea" {
-                    numbers.push(PropLot as u64);
-                    numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
-                } else {
-                    return Response::error("Bad Request", 400);
-                }
+        if segments[0] == "idea" {
+          numbers.push(PropLot as u64);
+          numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
+        } else {
+          return Response::error("Bad Request", 400);
+        }
 
-                Response::from_json(&UrlPayload {
-                    url: url.into(),
-                    sqid: Some(sqids.encode(&*numbers).unwrap()),
-                })
-            }
-            _ => Response::error("Bad Request", 400),
-        };
-    }
+        Response::from_json(&UrlPayload {
+          url: url.into(),
+          sqid: Some(sqids.encode(&*numbers).unwrap()),
+        })
+      }
+      _ => Response::error("Bad Request", 400),
+    };
+  }
 
-    Response::error("Bad Request", 400)
+  Response::error("Bad Request", 400)
 }

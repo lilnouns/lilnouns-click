@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.1.0-alpha.1]] - 2024-02-22
+## [1.1.0-alpha.2]] - 2024-02-22
+
+### Refactor
+
+- Update code to solve spacing issues and indentations
+
+## [1.1.0-alpha.1] - 2024-02-22
 
 ### Features
 
