@@ -307,7 +307,7 @@ pub async fn handle_fs_result<D>(req: Request, ctx: RouteContext<D>) -> worker::
       _ => None,
     };
 
-    let (image) = match (community, platform) {
+    let image = match (community, platform) {
       (Some(LilNouns), Some(Ethereum)) => {
         let image = req
           .url()
@@ -315,7 +315,7 @@ pub async fn handle_fs_result<D>(req: Request, ctx: RouteContext<D>) -> worker::
           .join(format!("{}/og.png", sqid).as_str())
           .unwrap()
           .to_string();
-        (image)
+        image
       }
       (Some(LilNouns), Some(PropLot)) => {
         let image = req
@@ -324,7 +324,7 @@ pub async fn handle_fs_result<D>(req: Request, ctx: RouteContext<D>) -> worker::
           .join(format!("{}/og.png", sqid).as_str())
           .unwrap()
           .to_string();
-        (image)
+        image
       }
       (Some(LilNouns), Some(MetaGov)) => {
         let image = req
@@ -333,9 +333,9 @@ pub async fn handle_fs_result<D>(req: Request, ctx: RouteContext<D>) -> worker::
           .join(format!("{}/og.png", sqid).as_str())
           .unwrap()
           .to_string();
-        (image)
+        image
       }
-      _ => (String::new()),
+      _ => String::new(),
     };
 
     let html_doc = format!(
