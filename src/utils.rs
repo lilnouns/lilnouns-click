@@ -62,14 +62,14 @@ pub fn create_og_image(title: &str, description: &str, background_color: &str) -
   let cloudinary_url = format!("https://res.cloudinary.com/{}/image/upload", cloudinary_id);
 
   let title_encoded = format!(
-    "/l_text:{}_60_bold:{},co_rgb:000000,c_fit,w_1000,h_200",
-    utf8_percent_encode("Londrina Solid", NON_ALPHANUMERIC),
+    "/l_text:{}_70:{},co_rgb:FFFFFF,c_fit,w_1100",
+    utf8_percent_encode("LondrinaSolid-Regular.ttf", NON_ALPHANUMERIC),
     utf8_percent_encode(&title, NON_ALPHANUMERIC)
   );
 
   let description_encoded = format!(
-    "/l_text:{}_40:{},co_rgb:FFFFFF,c_fit,w_1000",
-    utf8_percent_encode("Londrina Solid", NON_ALPHANUMERIC),
+    "/l_text:{}_40:{},co_rgb:FFFFFF,c_fit,w_1050",
+    utf8_percent_encode("RethinkSans-Regular.ttf", NON_ALPHANUMERIC),
     utf8_percent_encode(&description, NON_ALPHANUMERIC)
   );
 
@@ -77,13 +77,13 @@ pub fn create_og_image(title: &str, description: &str, background_color: &str) -
     &cloudinary_url,
     &background_color,
     "/c_scale,h_630,w_1200",
-    "/l_lil_noun_logo/c_scale,w_300/e_screen,fl_layer_apply,g_north,y_100",
+    "/l_lil_noggles/c_scale,w_300/e_screen,fl_layer_apply,g_north_west,x_75,y_75",
     &title_encoded,
-    "/fl_layer_apply,g_south_west,x_100,y_230",
+    "/fl_layer_apply,g_north_west,x_75,y_200",
     &description_encoded,
-    "/fl_layer_apply,g_south_west,x_100,y_70",
+    "/fl_layer_apply,g_north_west,x_75,y_380",
     "/f_auto,q_auto:eco",
-    "/blank.png",
+    "/blank.jpg",
   ];
 
   parts.join("")
