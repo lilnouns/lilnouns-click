@@ -206,7 +206,7 @@ pub async fn handle_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::
     let image = match (community, platform) {
       (Some(LilNouns), Some(Ethereum)) => {
         let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-        create_og_image(&title, &description, "7CC4F2")
+        create_og_image(&title, &description, "2A83F6")
       }
       (Some(LilNouns), Some(PropLot)) => {
         let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
