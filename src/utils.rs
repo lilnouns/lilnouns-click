@@ -2,6 +2,8 @@ use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use regex::Regex;
 use unidecode::unidecode;
 
+use crate::routes::Platform;
+
 pub fn truncate_and_clean_string(input: &str, limit: usize) -> String {
   // Check if the first line contains "#"
   let mut lines = input.lines();
@@ -51,33 +53,60 @@ pub fn truncate_and_clean_string(input: &str, limit: usize) -> String {
   }
 }
 
-pub fn create_og_image(title: &str, description: &str, background_color: &str) -> String {
+pub fn create_og_image(title: &str, description: &str, platform: Platform) -> String {
   let non_alpha_numeric = Regex::new("[^a-zA-Z0-9 .]").unwrap();
 
   let title = non_alpha_numeric.replace_all(title, "");
   let description = non_alpha_numeric.replace_all(description, "");
-  let background_color = format!("/b_rgb:{}", background_color);
+
+  let logo_image = format!(
+    "/{}",
+    match platform {
+      Platform::Ethereum => "l_lil_noggles_white",
+      Platform::PropLot => "l_lil_noggles",
+      Platform::MetaGov => "l_lil_noggles_white",
+    }
+  );
+  let foreground_color = format!(
+    "co_rgb:{}",
+    match platform {
+      Platform::Ethereum => "FFFFFF",
+      Platform::PropLot => "000000",
+      Platform::MetaGov => "FFFFFF",
+    }
+  );
+  let background_color = format!(
+    "/b_rgb:{}",
+    match platform {
+      Platform::Ethereum => "2A83F6",
+      Platform::PropLot => "FFEF2E",
+      Platform::MetaGov => "FE500C",
+    }
+  );
 
   let cloudinary_id = "nekofar";
   let cloudinary_url = format!("https://res.cloudinary.com/{}/image/upload", cloudinary_id);
 
   let title_encoded = format!(
-    "/l_text:{}_70:{},co_rgb:FFFFFF,c_fit,w_1100",
+    "/l_text:{}_70:{},{},c_fit,w_1100",
     utf8_percent_encode("LondrinaSolid-Regular.ttf", NON_ALPHANUMERIC),
-    utf8_percent_encode(&title, NON_ALPHANUMERIC)
+    utf8_percent_encode(&title, NON_ALPHANUMERIC),
+    &foreground_color
   );
 
   let description_encoded = format!(
-    "/l_text:{}_40:{},co_rgb:FFFFFF,c_fit,w_1050",
+    "/l_text:{}_40:{},{},c_fit,w_1050",
     utf8_percent_encode("RethinkSans-Regular.ttf", NON_ALPHANUMERIC),
-    utf8_percent_encode(&description, NON_ALPHANUMERIC)
+    utf8_percent_encode(&description, NON_ALPHANUMERIC),
+    &foreground_color
   );
 
   let parts = vec![
     &cloudinary_url,
     &background_color,
     "/c_scale,h_630,w_1200",
-    "/l_lil_noggles/c_scale,w_300/e_screen,fl_layer_apply,g_north_west,x_75,y_75",
+    &logo_image,
+    "/c_scale,w_300/e_screen,fl_layer_apply,g_north_west,x_75,y_75",
     &title_encoded,
     "/fl_layer_apply,g_north_west,x_75,y_200",
     &description_encoded,
