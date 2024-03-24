@@ -96,8 +96,15 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
 
   let description_encoded = format!(
     "/l_text:{}_40:{},{},c_fit,w_1050",
-    utf8_percent_encode("RethinkSans-Regular.ttf", NON_ALPHANUMERIC),
+    utf8_percent_encode("RethinkSans-SemiBold.ttf", NON_ALPHANUMERIC),
     utf8_percent_encode(&description, NON_ALPHANUMERIC),
+    &foreground_color
+  );
+
+  let domain_name_formatted = format!(
+    "/l_text:{}_40:{},{},c_fit,w_1050",
+    utf8_percent_encode("RethinkSans-ExtraBold.ttf", NON_ALPHANUMERIC),
+    "lilnouns.wtf".to_uppercase(),
     &foreground_color
   );
 
@@ -106,13 +113,15 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
     &background_color,
     "/c_scale,h_630,w_1200",
     &logo_image,
-    "/c_scale,w_300/e_screen,fl_layer_apply,g_north_west,x_75,y_75",
+    "/c_scale,w_300/e_screen,fl_layer_apply,g_north_west,x_70,y_70",
     &title_encoded,
-    "/fl_layer_apply,g_north_west,x_75,y_200",
+    "/fl_layer_apply,g_north_west,x_70,y_180",
     &description_encoded,
-    "/fl_layer_apply,g_north_west,x_75,y_380",
+    "/fl_layer_apply,g_north_west,x_70,y_345",
+    &domain_name_formatted,
+    "/fl_layer_apply,g_north_west,x_70,y_530",
     "/f_auto,q_auto:eco",
-    "/blank.jpg",
+    "/blank.png",
   ];
 
   parts.join("")
