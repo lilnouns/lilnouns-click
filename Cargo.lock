@@ -114,9 +114,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "chrono"
-version = "0.4.34"
+version = "0.4.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bc015644b92d5890fab7489e49d21f879d5c990186827d42ec511919404f38b"
+checksum = "8eaf5903dcbc0a39312feb77df2ff4c76387d591b9fc7b04a238dcf8bb62639a"
 dependencies = [
  "js-sys",
  "num-traits",
@@ -557,6 +557,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "http-body"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1cac85db508abc24a2e48553ba12a996e87244a0395ce011e62b37158745d643"
+dependencies = [
+ "bytes",
+ "http 1.1.0",
+]
+
+[[package]]
 name = "httparse"
 version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -580,7 +590,7 @@ dependencies = [
  "futures-util",
  "h2",
  "http 0.2.11",
- "http-body",
+ "http-body 0.4.6",
  "httparse",
  "httpdate",
  "itoa",
@@ -666,7 +676,7 @@ checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
 name = "lilnouns-click"
-version = "1.1.0-alpha.3"
+version = "1.1.0-alpha.4"
 dependencies = [
  "graphql_client",
  "html-escape",
@@ -979,9 +989,9 @@ checksum = "c08c74e62047bb2de4ff487b251e4a92e24f48745648451635cec7d591162d9f"
 
 [[package]]
 name = "reqwest"
-version = "0.11.24"
+version = "0.11.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c6920094eb85afde5e4a138be3f2de8bbdf28000f0029e72c45025a56b042251"
+checksum = "78bf93c4af7a8bb7d879d51cebe797356ff10ae8516ace542b5182d9dcac10b2"
 dependencies = [
  "base64",
  "bytes",
@@ -990,7 +1000,7 @@ dependencies = [
  "futures-util",
  "h2",
  "http 0.2.11",
- "http-body",
+ "http-body 0.4.6",
  "hyper",
  "hyper-tls",
  "ipnet",
@@ -1670,16 +1680,18 @@ dependencies = [
 
 [[package]]
 name = "worker"
-version = "0.0.19"
+version = "0.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3c4603afa2af7cdab02c982ecf31b06d03da641de448189bb2203a75c994bff"
+checksum = "01e01575624501026eab70b650e742394801f13eeac45f51f27e3c6a335e4d84"
 dependencies = [
  "async-trait",
+ "bytes",
  "chrono",
  "chrono-tz",
  "futures-channel",
  "futures-util",
  "http 1.1.0",
+ "http-body 1.0.0",
  "js-sys",
  "matchit",
  "pin-project",
@@ -1715,9 +1727,9 @@ dependencies = [
 
 [[package]]
 name = "worker-macros"
-version = "0.0.11"
+version = "0.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "561167c26ca0a0540021cb3f268305cc447c1cdf5b3cc39427270e9656c0a35e"
+checksum = "ba51b04dab6538cd7a6b6e1eb0795e65b63138c2d3b73686bc10d57d7770d0ec"
 dependencies = [
  "async-trait",
  "proc-macro2",
@@ -1731,9 +1743,9 @@ dependencies = [
 
 [[package]]
 name = "worker-sys"
-version = "0.0.11"
+version = "0.0.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2c3feab530cf367256a4dc3bbd8b9f52c50a944aacab826dcb3c6d7f64271abc"
+checksum = "45f793beb4fd7038637cda24502769ae1d90a32b9cdb3b48ff73ce9cf007affe"
 dependencies = [
  "cfg-if",
  "js-sys",
