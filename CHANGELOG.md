@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.6] - 2024-03-24
+
+### Refactor
+
+- Change frame and og images title to uppercase
+- Move og image theming to the function itself
+- Add domain name to the og image bottom
+
 ## [1.1.0-alpha.5] - 2024-03-24
 
 ### Bug Fixes
