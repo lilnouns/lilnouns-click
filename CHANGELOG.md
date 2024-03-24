@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.5] - 2024-03-24
+
+### Bug Fixes
+
+- Improve opengraph images for mobile devices
+
 ## [1.1.0-alpha.4] - 2024-03-24
 
 ### Bug Fixes
