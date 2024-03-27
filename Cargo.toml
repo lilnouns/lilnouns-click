@@ -27,7 +27,7 @@ serde = { version = "1.0.197", features = ["derive"] }
 sqids = "0.4.1"
 unidecode = "0.3.0"
 url = "2.5.0"
-worker = "0.0.21"
+worker = "0.0.22"
 
 [profile.release]
 lto = true
