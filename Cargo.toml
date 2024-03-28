@@ -16,7 +16,7 @@ wasm-opt = false
 crate-type = ["cdylib"]
 
 [dependencies]
-graphql_client = { version = "0.13.0", features = ["reqwest"] }
+graphql_client = { version = "0.14.0", features = ["reqwest"] }
 html-escape = { version = "0.2.13", default-features = false }
 html-minifier = { version = "5.0.0", default-features = false }
 log = { version = "0.4.21", features = [] }
