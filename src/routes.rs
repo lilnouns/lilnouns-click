@@ -127,8 +127,8 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
 
             <meta property="fc:frame" content="vNext" />
             <meta property="fc:frame:image" content="{}" />
-            <meta property="fc:frame:button:1" content="{}" />
-            <meta property="fc:frame:post_url" content="{}" />
+            <!-- meta property="fc:frame:button:1" content="{}" />
+            <meta property="fc:frame:post_url" content="{}" /-->
 
             <meta http-equiv="refresh" content="3; url={}" />
 
