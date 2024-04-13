@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.7] - 2024-04-13
+
+### Bug Fixes
+
+- Add colon to allowed characters for og images
+- Disable show result button for proposals
+
 ## [1.1.0-alpha.6] - 2024-03-24
 
 ### Refactor
