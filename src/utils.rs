@@ -54,7 +54,7 @@ pub fn truncate_and_clean_string(input: &str, limit: usize) -> String {
 }
 
 pub fn create_og_image(title: &str, description: &str, platform: Platform) -> String {
-  let non_alpha_numeric = Regex::new("[^a-zA-Z0-9 .]").unwrap();
+  let non_alpha_numeric = Regex::new("[^a-zA-Z0-9 .:]").unwrap();
 
   let title = non_alpha_numeric.replace_all(title, "");
   let description = non_alpha_numeric.replace_all(description, "");
