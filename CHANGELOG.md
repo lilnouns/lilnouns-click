@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.10] - 2024-05-20
+
+### Miscellaneous Tasks
+
+- Update Nouns GraphQL url in `wrangler.toml`
+
 ## [1.1.0-alpha.9] - 2024-05-07
 
 ### Bug Fixes
