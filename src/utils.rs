@@ -113,7 +113,7 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
     &background_color,
     "/c_scale,h_630,w_1200",
     &logo_image,
-    "/c_scale,w_300/e_screen,fl_layer_apply,g_north_west,x_70,y_70",
+    "/c_scale,w_250/e_screen,fl_layer_apply,g_north_west,x_70,y_70",
     &title_encoded,
     "/fl_layer_apply,g_north_west,x_70,y_180",
     &description_encoded,
