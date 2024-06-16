@@ -867,6 +867,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sqids",
+ "tower-service",
  "unidecode",
  "url",
  "worker",
