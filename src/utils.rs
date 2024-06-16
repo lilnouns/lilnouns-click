@@ -78,9 +78,9 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
   let background_color = format!(
     "/b_rgb:{}",
     match platform {
-      Platform::Ethereum => "2A83F6",
+      Platform::Ethereum => "7DC4F2",
       Platform::PropLot => "FFEF2E",
-      Platform::MetaGov => "FE500C",
+      Platform::MetaGov => "F0C850",
     }
   );
 
