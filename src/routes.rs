@@ -236,7 +236,7 @@ pub async fn handle_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::
       }
       (Some(LilNouns), Some(LilCamp)) => {
         let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-        create_og_image(numbers[2], &title.to_uppercase(), &description, Ethereum)
+        create_og_image(numbers[2], &title.to_uppercase(), &description, LilCamp)
       }
       _ => String::new(),
     };
