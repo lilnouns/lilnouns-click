@@ -183,6 +183,7 @@ type Auction {
   Whether or not the auction has been settled
   """
   settled: Boolean!
+  clientId: Int!
 
   """
   The auction bids
@@ -275,6 +276,14 @@ input Auction_filter {
   settled_not: Boolean
   settled_in: [Boolean!]
   settled_not_in: [Boolean!]
+  clientId: Int
+  clientId_not: Int
+  clientId_gt: Int
+  clientId_lt: Int
+  clientId_gte: Int
+  clientId_lte: Int
+  clientId_in: [Int!]
+  clientId_not_in: [Int!]
   bids_: Bid_filter
 
   """
@@ -299,6 +308,7 @@ enum Auction_orderBy {
   bidder__totalTokensHeldRaw
   bidder__totalTokensHeld
   settled
+  clientId
   bids
 }
 
@@ -342,6 +352,11 @@ type Bid {
   The timestamp of the block the bid is in
   """
   blockTimestamp: BigInt!
+
+  """
+  The ID of the client that facilitated this bid
+  """
+  clientId: Int
 }
 
 input Bid_filter {
@@ -448,6 +463,14 @@ input Bid_filter {
   blockTimestamp_lte: BigInt
   blockTimestamp_in: [BigInt!]
   blockTimestamp_not_in: [BigInt!]
+  clientId: Int
+  clientId_not: Int
+  clientId_gt: Int
+  clientId_lt: Int
+  clientId_gte: Int
+  clientId_lte: Int
+  clientId_in: [Int!]
+  clientId_not_in: [Int!]
 
   """
   Filter for the block changed event.
@@ -476,7 +499,9 @@ enum Bid_orderBy {
   auction__startTime
   auction__endTime
   auction__settled
+  auction__clientId
   blockTimestamp
+  clientId
 }
 
 scalar BigDecimal
@@ -665,6 +690,7 @@ enum CandidateFeedback_orderBy {
   candidate__canceled
   candidate__canceledTimestamp
   candidate__canceledBlock
+  candidate__number
   voter
   voter__id
   voter__delegatedVotesRaw
@@ -812,6 +838,11 @@ type DelegationEvent {
   noun: Noun!
 
   """
+  Current delegator address
+  """
+  delegator: Account!
+
+  """
   Previous delegate address
   """
   previousDelegate: Delegate!
@@ -862,6 +893,27 @@ input DelegationEvent_filter {
   noun_not_ends_with: String
   noun_not_ends_with_nocase: String
   noun_: Noun_filter
+  delegator: String
+  delegator_not: String
+  delegator_gt: String
+  delegator_lt: String
+  delegator_gte: String
+  delegator_lte: String
+  delegator_in: [String!]
+  delegator_not_in: [String!]
+  delegator_contains: String
+  delegator_contains_nocase: String
+  delegator_not_contains: String
+  delegator_not_contains_nocase: String
+  delegator_starts_with: String
+  delegator_starts_with_nocase: String
+  delegator_not_starts_with: String
+  delegator_not_starts_with_nocase: String
+  delegator_ends_with: String
+  delegator_ends_with_nocase: String
+  delegator_not_ends_with: String
+  delegator_not_ends_with_nocase: String
+  delegator_: Account_filter
   previousDelegate: String
   previousDelegate_not: String
   previousDelegate_gt: String
@@ -933,6 +985,12 @@ enum DelegationEvent_orderBy {
   id
   noun
   noun__id
+  delegator
+  delegator__id
+  delegator__tokenBalanceRaw
+  delegator__tokenBalance
+  delegator__totalTokensHeldRaw
+  delegator__totalTokensHeld
   previousDelegate
   previousDelegate__id
   previousDelegate__delegatedVotesRaw
@@ -1870,6 +1928,11 @@ type Governance {
   The proposal ID from which vote snapshots are taken at vote start instead of proposal creation
   """
   voteSnapshotBlockSwitchProposalId: BigInt!
+
+  """
+  Number of candidates created
+  """
+  candidates: BigInt!
 }
 
 input Governance_filter {
@@ -1953,6 +2016,14 @@ input Governance_filter {
   voteSnapshotBlockSwitchProposalId_lte: BigInt
   voteSnapshotBlockSwitchProposalId_in: [BigInt!]
   voteSnapshotBlockSwitchProposalId_not_in: [BigInt!]
+  candidates: BigInt
+  candidates_not: BigInt
+  candidates_gt: BigInt
+  candidates_lt: BigInt
+  candidates_gte: BigInt
+  candidates_lte: BigInt
+  candidates_in: [BigInt!]
+  candidates_not_in: [BigInt!]
 
   """
   Filter for the block changed event.
@@ -1973,6 +2044,7 @@ enum Governance_orderBy {
   delegatedVotes
   proposalsQueued
   voteSnapshotBlockSwitchProposalId
+  candidates
 }
 
 """
@@ -2175,12 +2247,12 @@ type Proposal {
   """
   The proposal threshold at the time of proposal creation
   """
-  proposalThreshold: BigInt!
+  proposalThreshold: BigInt
 
   """
   The required number of votes for quorum at the time of proposal creation
   """
-  quorumVotes: BigInt!
+  quorumVotes: BigInt
 
   """
   The number of votes in favor of the proposal
@@ -2210,7 +2282,7 @@ type Proposal {
   """
   Status of the proposal
   """
-  status: ProposalStatus!
+  status: ProposalStatus
 
   """
   Once the proposal is queued for execution it will have an ETA of the execution
@@ -2261,7 +2333,7 @@ type Proposal {
   """
   The update period end block
   """
-  updatePeriodEndBlock: BigInt!
+  updatePeriodEndBlock: BigInt
 
   """
   Feedback posts associated to this proposal
@@ -2283,6 +2355,51 @@ type Proposal {
   The block at which voting balance snapshots are taken for this proposal
   """
   voteSnapshotBlock: BigInt!
+
+  """
+  The block number at which this proposal was canceled
+  """
+  canceledBlock: BigInt
+
+  """
+  The timestamp when this proposal was canceled
+  """
+  canceledTimestamp: BigInt
+
+  """
+  The block number at which this proposal was executed
+  """
+  executedBlock: BigInt
+
+  """
+  The timestamp when this proposal was executed
+  """
+  executedTimestamp: BigInt
+
+  """
+  The block number at which this proposal was vetoed
+  """
+  vetoedBlock: BigInt
+
+  """
+  The timestamp when this proposal was vetoed
+  """
+  vetoedTimestamp: BigInt
+
+  """
+  The block number at which this proposal was queued
+  """
+  queuedBlock: BigInt
+
+  """
+  The timestamp when this proposal was queued
+  """
+  queuedTimestamp: BigInt
+
+  """
+  The ID of the client that facilitated this proposal
+  """
+  clientId: Int!
 }
 
 type ProposalCandidate {
@@ -2356,6 +2473,11 @@ type ProposalCandidate {
     orderDirection: OrderDirection
     where: ProposalCandidateVersion_filter
   ): [ProposalCandidateVersion!]!
+
+  """
+  This candidate's number
+  """
+  number: BigInt!
 }
 
 type ProposalCandidateContent {
@@ -2603,6 +2725,16 @@ type ProposalCandidateSignature {
   Whether this signature has been canceled
   """
   canceled: Boolean!
+
+  """
+  The signature's creation timestamp
+  """
+  createdTimestamp: BigInt!
+
+  """
+  The signature's creation block
+  """
+  createdBlock: BigInt!
 }
 
 input ProposalCandidateSignature_filter {
@@ -2718,6 +2850,22 @@ input ProposalCandidateSignature_filter {
   canceled_not: Boolean
   canceled_in: [Boolean!]
   canceled_not_in: [Boolean!]
+  createdTimestamp: BigInt
+  createdTimestamp_not: BigInt
+  createdTimestamp_gt: BigInt
+  createdTimestamp_lt: BigInt
+  createdTimestamp_gte: BigInt
+  createdTimestamp_lte: BigInt
+  createdTimestamp_in: [BigInt!]
+  createdTimestamp_not_in: [BigInt!]
+  createdBlock: BigInt
+  createdBlock_not: BigInt
+  createdBlock_gt: BigInt
+  createdBlock_lt: BigInt
+  createdBlock_gte: BigInt
+  createdBlock_lte: BigInt
+  createdBlock_in: [BigInt!]
+  createdBlock_not_in: [BigInt!]
 
   """
   Filter for the block changed event.
@@ -2747,6 +2895,8 @@ enum ProposalCandidateSignature_orderBy {
   sigDigest
   reason
   canceled
+  createdTimestamp
+  createdBlock
 }
 
 type ProposalCandidateVersion {
@@ -2891,6 +3041,7 @@ enum ProposalCandidateVersion_orderBy {
   proposal__canceled
   proposal__canceledTimestamp
   proposal__canceledBlock
+  proposal__number
   createdTimestamp
   createdBlock
   updateMessage
@@ -3026,6 +3177,14 @@ input ProposalCandidate_filter {
   latestVersion_not_ends_with_nocase: String
   latestVersion_: ProposalCandidateVersion_filter
   versions_: ProposalCandidateVersion_filter
+  number: BigInt
+  number_not: BigInt
+  number_gt: BigInt
+  number_lt: BigInt
+  number_gte: BigInt
+  number_lte: BigInt
+  number_in: [BigInt!]
+  number_not_in: [BigInt!]
 
   """
   Filter for the block changed event.
@@ -3053,6 +3212,7 @@ enum ProposalCandidate_orderBy {
   latestVersion__createdBlock
   latestVersion__updateMessage
   versions
+  number
 }
 
 type ProposalFeedback {
@@ -3240,6 +3400,15 @@ enum ProposalFeedback_orderBy {
   proposal__updatePeriodEndBlock
   proposal__onTimelockV1
   proposal__voteSnapshotBlock
+  proposal__canceledBlock
+  proposal__canceledTimestamp
+  proposal__executedBlock
+  proposal__executedTimestamp
+  proposal__vetoedBlock
+  proposal__vetoedTimestamp
+  proposal__queuedBlock
+  proposal__queuedTimestamp
+  proposal__clientId
   voter
   voter__id
   voter__delegatedVotesRaw
@@ -3266,6 +3435,11 @@ type ProposalVersion {
   The proposal that was updated
   """
   proposal: Proposal!
+
+  """
+  The block number of the update
+  """
+  createdBlock: BigInt!
 
   """
   The block timestamp of the update
@@ -3338,6 +3512,14 @@ input ProposalVersion_filter {
   proposal_not_ends_with: String
   proposal_not_ends_with_nocase: String
   proposal_: Proposal_filter
+  createdBlock: BigInt
+  createdBlock_not: BigInt
+  createdBlock_gt: BigInt
+  createdBlock_lt: BigInt
+  createdBlock_gte: BigInt
+  createdBlock_lte: BigInt
+  createdBlock_in: [BigInt!]
+  createdBlock_not_in: [BigInt!]
   createdAt: BigInt
   createdAt_not: BigInt
   createdAt_gt: BigInt
@@ -3468,6 +3650,16 @@ enum ProposalVersion_orderBy {
   proposal__updatePeriodEndBlock
   proposal__onTimelockV1
   proposal__voteSnapshotBlock
+  proposal__canceledBlock
+  proposal__canceledTimestamp
+  proposal__executedBlock
+  proposal__executedTimestamp
+  proposal__vetoedBlock
+  proposal__vetoedTimestamp
+  proposal__queuedBlock
+  proposal__queuedTimestamp
+  proposal__clientId
+  createdBlock
   createdAt
   targets
   values
@@ -3759,6 +3951,78 @@ input Proposal_filter {
   voteSnapshotBlock_lte: BigInt
   voteSnapshotBlock_in: [BigInt!]
   voteSnapshotBlock_not_in: [BigInt!]
+  canceledBlock: BigInt
+  canceledBlock_not: BigInt
+  canceledBlock_gt: BigInt
+  canceledBlock_lt: BigInt
+  canceledBlock_gte: BigInt
+  canceledBlock_lte: BigInt
+  canceledBlock_in: [BigInt!]
+  canceledBlock_not_in: [BigInt!]
+  canceledTimestamp: BigInt
+  canceledTimestamp_not: BigInt
+  canceledTimestamp_gt: BigInt
+  canceledTimestamp_lt: BigInt
+  canceledTimestamp_gte: BigInt
+  canceledTimestamp_lte: BigInt
+  canceledTimestamp_in: [BigInt!]
+  canceledTimestamp_not_in: [BigInt!]
+  executedBlock: BigInt
+  executedBlock_not: BigInt
+  executedBlock_gt: BigInt
+  executedBlock_lt: BigInt
+  executedBlock_gte: BigInt
+  executedBlock_lte: BigInt
+  executedBlock_in: [BigInt!]
+  executedBlock_not_in: [BigInt!]
+  executedTimestamp: BigInt
+  executedTimestamp_not: BigInt
+  executedTimestamp_gt: BigInt
+  executedTimestamp_lt: BigInt
+  executedTimestamp_gte: BigInt
+  executedTimestamp_lte: BigInt
+  executedTimestamp_in: [BigInt!]
+  executedTimestamp_not_in: [BigInt!]
+  vetoedBlock: BigInt
+  vetoedBlock_not: BigInt
+  vetoedBlock_gt: BigInt
+  vetoedBlock_lt: BigInt
+  vetoedBlock_gte: BigInt
+  vetoedBlock_lte: BigInt
+  vetoedBlock_in: [BigInt!]
+  vetoedBlock_not_in: [BigInt!]
+  vetoedTimestamp: BigInt
+  vetoedTimestamp_not: BigInt
+  vetoedTimestamp_gt: BigInt
+  vetoedTimestamp_lt: BigInt
+  vetoedTimestamp_gte: BigInt
+  vetoedTimestamp_lte: BigInt
+  vetoedTimestamp_in: [BigInt!]
+  vetoedTimestamp_not_in: [BigInt!]
+  queuedBlock: BigInt
+  queuedBlock_not: BigInt
+  queuedBlock_gt: BigInt
+  queuedBlock_lt: BigInt
+  queuedBlock_gte: BigInt
+  queuedBlock_lte: BigInt
+  queuedBlock_in: [BigInt!]
+  queuedBlock_not_in: [BigInt!]
+  queuedTimestamp: BigInt
+  queuedTimestamp_not: BigInt
+  queuedTimestamp_gt: BigInt
+  queuedTimestamp_lt: BigInt
+  queuedTimestamp_gte: BigInt
+  queuedTimestamp_lte: BigInt
+  queuedTimestamp_in: [BigInt!]
+  queuedTimestamp_not_in: [BigInt!]
+  clientId: Int
+  clientId_not: Int
+  clientId_gt: Int
+  clientId_lt: Int
+  clientId_gte: Int
+  clientId_lte: Int
+  clientId_in: [Int!]
+  clientId_not_in: [Int!]
 
   """
   Filter for the block changed event.
@@ -3807,6 +4071,15 @@ enum Proposal_orderBy {
   feedbackPosts
   onTimelockV1
   voteSnapshotBlock
+  canceledBlock
+  canceledTimestamp
+  executedBlock
+  executedTimestamp
+  vetoedBlock
+  vetoedTimestamp
+  queuedBlock
+  queuedTimestamp
+  clientId
 }
 
 type Query {
@@ -5603,6 +5876,16 @@ type Vote {
   Block number of vote
   """
   blockNumber: BigInt!
+
+  """
+  The timestamp of the block the vote is in
+  """
+  blockTimestamp: BigInt!
+
+  """
+  The ID of the client that facilitated this vote
+  """
+  clientId: Int!
 }
 
 input Vote_filter {
@@ -5719,6 +6002,22 @@ input Vote_filter {
   blockNumber_lte: BigInt
   blockNumber_in: [BigInt!]
   blockNumber_not_in: [BigInt!]
+  blockTimestamp: BigInt
+  blockTimestamp_not: BigInt
+  blockTimestamp_gt: BigInt
+  blockTimestamp_lt: BigInt
+  blockTimestamp_gte: BigInt
+  blockTimestamp_lte: BigInt
+  blockTimestamp_in: [BigInt!]
+  blockTimestamp_not_in: [BigInt!]
+  clientId: Int
+  clientId_not: Int
+  clientId_gt: Int
+  clientId_lt: Int
+  clientId_gte: Int
+  clientId_lte: Int
+  clientId_in: [Int!]
+  clientId_not_in: [Int!]
 
   """
   Filter for the block changed event.
@@ -5768,7 +6067,18 @@ enum Vote_orderBy {
   proposal__updatePeriodEndBlock
   proposal__onTimelockV1
   proposal__voteSnapshotBlock
+  proposal__canceledBlock
+  proposal__canceledTimestamp
+  proposal__executedBlock
+  proposal__executedTimestamp
+  proposal__vetoedBlock
+  proposal__vetoedTimestamp
+  proposal__queuedBlock
+  proposal__queuedTimestamp
+  proposal__clientId
   blockNumber
+  blockTimestamp
+  clientId
 }
 
 type _Block_ {

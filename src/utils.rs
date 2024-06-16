@@ -62,9 +62,9 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
   let logo_image = format!(
     "/{}",
     match platform {
-      Platform::Ethereum => "l_lil_noggles_white",
-      Platform::PropLot => "l_lil_noggles",
-      Platform::MetaGov => "l_lil_noggles_white",
+      Platform::Ethereum => "lil_noun_logo",
+      Platform::PropLot => "lil_noun_logo",
+      Platform::MetaGov => "lil_noun_logo",
     }
   );
   let foreground_color = format!(
@@ -78,9 +78,9 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
   let background_color = format!(
     "/b_rgb:{}",
     match platform {
-      Platform::Ethereum => "2A83F6",
+      Platform::Ethereum => "7DC4F2",
       Platform::PropLot => "FFEF2E",
-      Platform::MetaGov => "FE500C",
+      Platform::MetaGov => "F0C850",
     }
   );
 
