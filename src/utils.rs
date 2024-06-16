@@ -110,7 +110,7 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
     &title_encoded,
     "/fl_layer_apply,g_north_west,x_70,y_220",
     &description_encoded,
-    "/fl_layer_apply,g_north_west,x_70,y_345",
+    "/fl_layer_apply,g_north_west,x_70,y_385",
     "/f_auto,q_auto:eco",
     "/blank.png",
   ];
