@@ -9,7 +9,7 @@ use crate::{
   queries::{fetch_lil_nouns_data, fetch_meta_gov_data, fetch_prop_lot_data},
   routes::{
     Community::LilNouns,
-    Platform::{Ethereum, MetaGov, PropLot},
+    Platform::{Ethereum, LilCamp, MetaGov, PropLot},
   },
   utils::create_og_image,
 };
@@ -30,6 +30,7 @@ pub enum Platform {
   Ethereum = 1,
   PropLot = 2,
   MetaGov = 3,
+  LilCamp = 4,
 }
 
 pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
@@ -46,6 +47,7 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
       1 => Some(Ethereum),
       2 => Some(PropLot),
       3 => Some(MetaGov),
+      4 => Some(LilCamp),
       _ => None,
     };
 
@@ -86,6 +88,21 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
           "https://lilnouns.wtf/vote/nounsdao", numbers[2], numbers[2]
         );
         let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
+        let image = req
+          .url()
+          .unwrap()
+          .join(format!("{}/og.png", sqid).as_str())
+          .unwrap()
+          .to_string();
+        (url, title, description, image)
+      }
+      (Some(LilNouns), Some(LilCamp)) => {
+        let url = format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
+           utm_content=proposal_{}",
+          "https://lilnouns.camp/proposals", numbers[2], numbers[2]
+        );
+        let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
         let image = req
           .url()
           .unwrap()
@@ -200,6 +217,7 @@ pub async fn handle_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::
       1 => Some(Ethereum),
       2 => Some(PropLot),
       3 => Some(MetaGov),
+      4 => Some(LilCamp),
       _ => None,
     };
 
@@ -215,6 +233,10 @@ pub async fn handle_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::
       (Some(LilNouns), Some(MetaGov)) => {
         let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
         create_og_image(numbers[2], &title.to_uppercase(), &description, MetaGov)
+      }
+      (Some(LilNouns), Some(LilCamp)) => {
+        let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
+        create_og_image(numbers[2], &title.to_uppercase(), &description, Ethereum)
       }
       _ => String::new(),
     };
@@ -273,6 +295,31 @@ pub async fn handle_creation<D>(
 
         if segments[0] == "idea" {
           numbers.push(PropLot as u64);
+          numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
+        } else {
+          return Response::error("Bad Request", 400);
+        }
+
+        Response::from_json(&UrlPayload {
+          url: url.into(),
+          sqid: Some(sqids.encode(&*numbers).unwrap()),
+        })
+      }
+      Some("lilnouns.camp") | Some("www.lilnouns.camp") => {
+        numbers.push(LilNouns as u64);
+
+        let segments: Vec<_> = url
+          .path_segments()
+          .expect("Cannot get path segments")
+          .filter(|segment| !segment.is_empty())
+          .collect();
+
+        if segments.is_empty() || segments[0] != "proposals" {
+          return Response::error("Bad Request", 400);
+        }
+
+        if segments[0] == "proposals" {
+          numbers.push(LilCamp as u64);
           numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
         } else {
           return Response::error("Bad Request", 400);

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.16] - 2024-06-16
+
+### Features
+
+- Add Lilnouns Camp to Platform enum and handle functionalities
+
 ## [1.1.0-alpha.15] - 2024-06-16
 
 ### Refactor

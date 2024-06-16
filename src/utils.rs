@@ -65,6 +65,7 @@ pub fn create_og_image(id: u64, title: &str, description: &str, platform: Platfo
       Platform::Ethereum => "l_lil_noun_logo",
       Platform::PropLot => "l_lil_noun_logo",
       Platform::MetaGov => "l_lil_noun_logo",
+      Platform::LilCamp => "l_lil_noun_logo",
     }
   );
   let foreground_color = format!(
@@ -73,6 +74,7 @@ pub fn create_og_image(id: u64, title: &str, description: &str, platform: Platfo
       Platform::Ethereum => "FFFFFF",
       Platform::PropLot => "000000",
       Platform::MetaGov => "FFFFFF",
+      Platform::LilCamp => "FFFFFF",
     }
   );
   let background_color = format!(
@@ -81,6 +83,7 @@ pub fn create_og_image(id: u64, title: &str, description: &str, platform: Platfo
       Platform::Ethereum => "7DC4F2",
       Platform::PropLot => "FFEF2E",
       Platform::MetaGov => "F0C850",
+      Platform::LilCamp => "156636",
     }
   );
 
