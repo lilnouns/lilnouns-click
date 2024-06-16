@@ -206,15 +206,15 @@ pub async fn handle_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::
     let image = match (community, platform) {
       (Some(LilNouns), Some(Ethereum)) => {
         let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-        create_og_image(&title.to_uppercase(), &description, Ethereum)
+        create_og_image(numbers[2], &title.to_uppercase(), &description, Ethereum)
       }
       (Some(LilNouns), Some(PropLot)) => {
         let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
-        create_og_image(&title.to_uppercase(), &description, PropLot)
+        create_og_image(numbers[2], &title.to_uppercase(), &description, PropLot)
       }
       (Some(LilNouns), Some(MetaGov)) => {
         let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
-        create_og_image(&title.to_uppercase(), &description, MetaGov)
+        create_og_image(numbers[2], &title.to_uppercase(), &description, MetaGov)
       }
       _ => String::new(),
     };

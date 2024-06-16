@@ -53,7 +53,7 @@ pub fn truncate_and_clean_string(input: &str, limit: usize) -> String {
   }
 }
 
-pub fn create_og_image(title: &str, description: &str, platform: Platform) -> String {
+pub fn create_og_image(id: u64, title: &str, description: &str, platform: Platform) -> String {
   let non_alpha_numeric = Regex::new("[^a-zA-Z0-9 .:]").unwrap();
 
   let title = non_alpha_numeric.replace_all(title, "");
@@ -88,16 +88,23 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
   let cloudinary_url = format!("https://res.cloudinary.com/{}/image/upload", cloudinary_id);
 
   let title_encoded = format!(
-    "/l_text:{}_70:{},{},c_fit,w_1100",
+    "/l_text:{}_64:{},{},c_fit,w_1100",
     utf8_percent_encode("LondrinaSolid-Regular.ttf", NON_ALPHANUMERIC),
     utf8_percent_encode(&title, NON_ALPHANUMERIC),
     &foreground_color
   );
 
   let description_encoded = format!(
-    "/l_text:{}_50:{},{},c_fit,w_1050",
+    "/l_text:{}_48:{},{},c_fit,w_1050",
     utf8_percent_encode("LondrinaSolid-Light.ttf", NON_ALPHANUMERIC),
     utf8_percent_encode(&description, NON_ALPHANUMERIC),
+    &foreground_color
+  );
+
+  let reference_number_formatted = format!(
+    "/l_text:Prop%20{}_56:{},{},c_fit,w_1050",
+    utf8_percent_encode("RethinkSans-ExtraBold.ttf", NON_ALPHANUMERIC),
+    id,
     &foreground_color
   );
 
@@ -106,11 +113,13 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
     &background_color,
     "/c_scale,h_630,w_1200",
     &logo_image,
-    "/c_scale,w_250/e_screen,fl_layer_apply,g_north_west,x_70,y_70",
+    "/c_scale,w_210/e_screen,fl_layer_apply,g_north_west,x_70,y_70",
     &title_encoded,
     "/fl_layer_apply,g_north_west,x_70,y_220",
     &description_encoded,
     "/fl_layer_apply,g_north_west,x_70,y_385",
+    &reference_number_formatted,
+    "/fl_layer_apply,g_north_east,x_70,y_70",
     "/f_auto,q_auto:eco",
     "/blank.png",
   ];
