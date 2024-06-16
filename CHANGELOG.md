@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.18] - 2024-06-16
+
+### Bug Fixes
+
+- Change Ethereum to LilCamp in og image creation
+
 ## [1.1.0-alpha.17] - 2024-06-16
 
 ### Refactor
