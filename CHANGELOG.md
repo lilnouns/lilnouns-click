@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.17] - 2024-06-16
+
+### Refactor
+
+- Change font and format of reference number
+
 ## [1.1.0-alpha.16] - 2024-06-16
 
 ### Features
