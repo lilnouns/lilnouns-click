@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.15] - 2024-06-16
+
+### Refactor
+
+- Adjust text size in cloudinary URL generation
+- Include id in og image creation and adjust image styling
+
 ## [1.1.0-alpha.14] - 2024-06-16
 
 ### Bug Fixes
