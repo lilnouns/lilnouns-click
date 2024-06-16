@@ -95,8 +95,8 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
   );
 
   let description_encoded = format!(
-    "/l_text:{}_40:{},{},c_fit,w_1050",
-    utf8_percent_encode("RethinkSans-SemiBold.ttf", NON_ALPHANUMERIC),
+    "/l_text:{}_50:{},{},c_fit,w_1050",
+    utf8_percent_encode("LondrinaSolid-Light.ttf", NON_ALPHANUMERIC),
     utf8_percent_encode(&description, NON_ALPHANUMERIC),
     &foreground_color
   );
@@ -115,11 +115,9 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
     &logo_image,
     "/c_scale,w_250/e_screen,fl_layer_apply,g_north_west,x_70,y_70",
     &title_encoded,
-    "/fl_layer_apply,g_north_west,x_70,y_180",
+    "/fl_layer_apply,g_north_west,x_70,y_220",
     &description_encoded,
     "/fl_layer_apply,g_north_west,x_70,y_345",
-    &domain_name_formatted,
-    "/fl_layer_apply,g_north_west,x_70,y_530",
     "/f_auto,q_auto:eco",
     "/blank.png",
   ];
