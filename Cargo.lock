@@ -870,6 +870,7 @@ dependencies = [
  "unidecode",
  "url",
  "worker",
+ "worker-macros",
 ]
 
 [[package]]
@@ -1852,6 +1853,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d8aca53ec63e508176a89a573c972266f0f98bcc48bd866def7be0d939ef9268"
 dependencies = [
  "async-trait",
+ "axum",
  "bytes",
  "chrono",
  "futures-channel",
