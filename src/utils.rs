@@ -101,13 +101,6 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
     &foreground_color
   );
 
-  let domain_name_formatted = format!(
-    "/l_text:{}_40:{},{},c_fit,w_1050",
-    utf8_percent_encode("RethinkSans-ExtraBold.ttf", NON_ALPHANUMERIC),
-    "lilnouns.wtf".to_uppercase(),
-    &foreground_color
-  );
-
   let parts = vec![
     &cloudinary_url,
     &background_color,
