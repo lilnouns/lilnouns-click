@@ -88,14 +88,14 @@ pub fn create_og_image(title: &str, description: &str, platform: Platform) -> St
   let cloudinary_url = format!("https://res.cloudinary.com/{}/image/upload", cloudinary_id);
 
   let title_encoded = format!(
-    "/l_text:{}_70:{},{},c_fit,w_1100",
+    "/l_text:{}_64:{},{},c_fit,w_1100",
     utf8_percent_encode("LondrinaSolid-Regular.ttf", NON_ALPHANUMERIC),
     utf8_percent_encode(&title, NON_ALPHANUMERIC),
     &foreground_color
   );
 
   let description_encoded = format!(
-    "/l_text:{}_50:{},{},c_fit,w_1050",
+    "/l_text:{}_48:{},{},c_fit,w_1050",
     utf8_percent_encode("LondrinaSolid-Light.ttf", NON_ALPHANUMERIC),
     utf8_percent_encode(&description, NON_ALPHANUMERIC),
     &foreground_color
