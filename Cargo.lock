@@ -857,6 +857,7 @@ dependencies = [
  "reqwest",
  "serde",
  "sqids",
+ "tower-service",
  "unidecode",
  "url",
  "worker",
