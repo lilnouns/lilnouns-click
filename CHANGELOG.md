@@ -2,12 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.14] - 2024-06-16
+
+### Bug Fixes
+
+- Adjust y-coordinate for description layer in utils
+
 ## [1.1.0-alpha.13] - 2024-06-16
 
 ### Refactor
 
 - Reduce logo image scale
 - Update font and adjust text positioning in utils
+- Remove unused formatted domain name from utils
 
 ## [1.1.0-alpha.12] - 2024-06-16
 
