@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.12] - 2024-06-16
+
+### Bug Fixes
+
+- Update logo image references in utils
+
 ## [1.1.0-alpha.11] - 2024-06-16
 
 ### Bug Fixes
