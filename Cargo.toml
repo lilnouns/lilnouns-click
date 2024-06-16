@@ -29,6 +29,7 @@ sqids = "0.4.1"
 unidecode = "0.3.0"
 url = "2.5.1"
 worker = { version = "0.3.0", features = ["http", "axum"] }
+worker-macros = { version = "0.3.0", features = ["http"] }
 
 [profile.release]
 lto = true
