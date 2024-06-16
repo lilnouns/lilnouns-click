@@ -105,9 +105,9 @@ pub fn create_og_image(id: u64, title: &str, description: &str, platform: Platfo
   );
 
   let reference_number_formatted = format!(
-    "/l_text:Prop%20{}_56:{},{},c_fit,w_1050",
-    utf8_percent_encode("RethinkSans-ExtraBold.ttf", NON_ALPHANUMERIC),
-    id,
+    "/l_text:{}_56:{},{},c_fit,w_1050",
+    utf8_percent_encode("LondrinaSolid-Black.ttf", NON_ALPHANUMERIC),
+    utf8_percent_encode(format!("Prop {}", id).as_str(), NON_ALPHANUMERIC),
     &foreground_color
   );
 
