@@ -35,6 +35,7 @@ pub enum Platform {
 
 pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
   if let Some(sqid) = ctx.param("sqid") {
+    let ga_id = ctx.secret("GA_ID").unwrap();
     let sqids = Sqids::default();
     let numbers = sqids.decode(&sqid);
 
@@ -155,6 +156,16 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap" rel="stylesheet">
+
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id={}"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){{dataLayer.push(arguments);}}
+              gtag('js', new Date());
+
+              gtag('config', '{}');
+            </script>
         </head>
         <body style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; font-family: 'Londrina Solid', cursive;">
             <div style="text-align: center;">
@@ -183,6 +194,8 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
       url,                         // Page Refresh URL
       encode_safe(&title),         // Page Title
       encode_safe(&description),   // Page Description
+      ga_id,                       // Google Analytics ID
+      ga_id,                       // Google Analytics ID
       url,                         // Page Content Link URL
       encode_safe(&title),         // Page Content Link Title
     );
