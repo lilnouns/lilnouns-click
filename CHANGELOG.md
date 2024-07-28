@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.23] - 2024-07-28
+
+### Bug Fixes
+
+- Update URL for redirection
+
 ## [1.1.0-alpha.22] - 2024-07-28
 
 ### Bug Fixes
