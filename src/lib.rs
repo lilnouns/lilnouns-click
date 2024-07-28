@@ -12,7 +12,7 @@ async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
   router
     .get("/", |_, _| {
       Response::redirect(Url::parse(
-        "https://lilnouns.wtf?utm_source=farcaster&utm_medium=social",
+        "https://lilnouns.camp?utm_source=farcaster&utm_medium=social",
       )?)
     })
     .get_async("/:sqid", routes::handle_redirect)
