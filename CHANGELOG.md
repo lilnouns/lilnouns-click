@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.22] - 2024-07-28
+
+### Bug Fixes
+
+- Add google analytics to track page visits
+
 ## [1.1.0-alpha.21] - 2024-07-27
 
 ### Bug Fixes
