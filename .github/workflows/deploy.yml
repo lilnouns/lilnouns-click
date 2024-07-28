@@ -50,6 +50,10 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           apiToken: ${{ secrets.CF_API_TOKEN }}
           command: deploy
+          secrets: |
+            GA_ID
+        env:
+          GA_ID: ${{ secrets.GA_ID }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
