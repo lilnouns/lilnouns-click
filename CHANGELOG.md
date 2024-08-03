@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.24] - 2024-08-03
+
+### Bug Fixes
+
+- Update lil nouns subgraph URL to latest version
+
 ## [1.1.0-alpha.23] - 2024-07-28
 
 ### Bug Fixes
