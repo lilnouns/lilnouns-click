@@ -7,12 +7,12 @@ command = "cargo install -q -f worker-build && worker-build --release"
 
 [vars]
 NOUNS_GRAPHQL_URL = "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn"
-LIL_NOUNS_GRAPHQL_URL = "https://api.goldsky.com/api/public/project_cldjvjgtylso13swq3dre13sf/subgraphs/lil-nouns-subgraph/1.0.4/gn"
+LIL_NOUNS_GRAPHQL_URL = "https://api.goldsky.com/api/public/project_cldjvjgtylso13swq3dre13sf/subgraphs/lil-nouns-subgraph/1.0.6/gn"
 PROP_HOUSE_GRAPHQL_URL = "https://prod.backend.prop.house/graphql"
 PROP_LOT_GRAPHQL_URL = "https://lilnouns.proplot.wtf/api/graphql"
 
 [env.dev.vars]
 NOUNS_GRAPHQL_URL = "https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/prod/gn"
-LIL_NOUNS_GRAPHQL_URL = "https://api.goldsky.com/api/public/project_cldjvjgtylso13swq3dre13sf/subgraphs/lil-nouns-subgraph/1.0.4/gn"
+LIL_NOUNS_GRAPHQL_URL = "https://api.goldsky.com/api/public/project_cldjvjgtylso13swq3dre13sf/subgraphs/lil-nouns-subgraph/1.0.6/gn"
 PROP_HOUSE_GRAPHQL_URL = "https://prod.backend.prop.house/graphql"
 PROP_LOT_GRAPHQL_URL = "https://lilnouns.proplot.wtf/api/graphql"
