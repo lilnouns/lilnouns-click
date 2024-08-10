@@ -876,9 +876,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.10.5"
+version = "1.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b91213439dad192326a0d7c6ee3955910425f441d7038e0d6933b0aec5c4517f"
+checksum = "4219d74c6b67a3654a9fbebc4b419e22126d13d2f3c4a07ee0cb61ff79a79619"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -1011,9 +1011,9 @@ dependencies = [
 
 [[package]]
 name = "serde"
-version = "1.0.204"
+version = "1.0.205"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc76f558e0cbb2a839d37354c575f1dc3fdc6546b5be373ba43d95f231bf7c12"
+checksum = "e33aedb1a7135da52b7c21791455563facbbcc43d0f0f66165b42c21b3dfb150"
 dependencies = [
  "serde_derive",
 ]
@@ -1042,9 +1042,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.204"
+version = "1.0.205"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e0cd7e117be63d3c3678776753929474f3b04a43a080c744d6b0ae2a8c28e222"
+checksum = "692d6f5ac90220161d6774db30c662202721e64aed9058d2c394f451261420c1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1590,9 +1590,9 @@ dependencies = [
 
 [[package]]
 name = "worker"
-version = "0.3.1"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "76faa841b0c43036d7a0c15e7ea6917ea8edd654c0255f641b6a91ee587fc35d"
+checksum = "3cda58fc54ac88c54387c3a48f46fa066ccb48f2d81f7514dc6c240a2a13bf4e"
 dependencies = [
  "async-trait",
  "bytes",
@@ -1636,9 +1636,9 @@ dependencies = [
 
 [[package]]
 name = "worker-macros"
-version = "0.3.1"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10720bd9a0f6681445769d7eaa30758cc92b51050943bc615ad70cbcbac45360"
+checksum = "cc9b615cb8673627508ceab81cd3a6080ff53d8de696bd5f5a08ac8bb1491a9c"
 dependencies = [
  "async-trait",
  "proc-macro2",
@@ -1652,9 +1652,9 @@ dependencies = [
 
 [[package]]
 name = "worker-sys"
-version = "0.3.1"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a76ce0f37481733a38c20d6d696f3c365e86ab059a6dfd37dea15c3b500416a4"
+checksum = "3ef1e184943d021cf4511d29ddf411a8e75ee511d4fc587f207b60ddcb9698a2"
 dependencies = [
  "cfg-if",
  "js-sys",
