@@ -1,6 +1,6 @@
 [package]
 name = "lilnouns-click"
-version = "1.1.0-alpha.25"
+version = "1.1.0-alpha.26"
 authors = ["Milad Nekofar <milad@nekofar.com>"]
 edition = "2021"
 description = "A Nounish URL shortener for LilNouns DAO."
@@ -23,11 +23,11 @@ log = { version = "0.4.22", features = [] }
 percent-encoding = "2.3.1"
 regex = "1.10.6"
 reqwest = "0.11.26"
-serde = { version = "1.0.205", features = ["derive"] }
+serde = { version = "1.0.209", features = ["derive"] }
 sqids = "0.4.1"
 unidecode = "0.3.0"
 url = "2.5.2"
-worker = "0.3.3"
+worker = "0.3.4"
 
 [profile.release]
 lto = true
