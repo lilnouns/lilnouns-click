@@ -116,6 +116,12 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
       _ => (String::new(), String::new(), String::new(), String::new()),
     };
 
+    let mini_app_url = req
+      .url()
+      .unwrap()
+      .as_str()
+      .replace(sqid, format!("app/{}", sqid).as_str());
+
     let html_doc = format!(
       r#"
         <!DOCTYPE html>
@@ -179,26 +185,26 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         </body>
         </html>
     "#,
-      url,                         // OpenGraph URL
-      encode_safe(&title),         // OpenGraph Title
-      encode_safe(&description),   // OpenGraph Description
-      image,                       // OpenGraph Image URL
-      image,                       // OpenGraph Image Secure URL
-      encode_safe(&title),         // OpenGraph Image Alt
-      url,                         // Twitter URL
-      encode_safe(&title),         // Twitter Title
-      encode_safe(&description),   // Twitter Description
-      image,                       // Twitter Image
-      image,                       // Farcaster Image
-      "Read",                      // Farcaster Button #1
-      req.url().unwrap().as_str(), // Farcaster Composer URL
-      url,                         // Page Refresh URL
-      encode_safe(&title),         // Page Title
-      encode_safe(&description),   // Page Description
-      ga_id,                       // Google Analytics ID
-      ga_id,                       // Google Analytics ID
-      url,                         // Page Content Link URL
-      encode_safe(&title),         // Page Content Link Title
+      url,                       // OpenGraph URL
+      encode_safe(&title),       // OpenGraph Title
+      encode_safe(&description), // OpenGraph Description
+      image,                     // OpenGraph Image URL
+      image,                     // OpenGraph Image Secure URL
+      encode_safe(&title),       // OpenGraph Image Alt
+      url,                       // Twitter URL
+      encode_safe(&title),       // Twitter Title
+      encode_safe(&description), // Twitter Description
+      image,                     // Twitter Image
+      image,                     // Farcaster Image
+      "Read",                    // Farcaster Button #1
+      mini_app_url,              // Farcaster Composer URL
+      url,                       // Page Refresh URL
+      encode_safe(&title),       // Page Title
+      encode_safe(&description), // Page Description
+      ga_id,                     // Google Analytics ID
+      ga_id,                     // Google Analytics ID
+      url,                       // Page Content Link URL
+      encode_safe(&title),       // Page Content Link Title
     );
 
     let minified_html = minify(html_doc).expect("Failed to minify HTML");
