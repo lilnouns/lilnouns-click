@@ -1,6 +1,6 @@
 [package]
 name = "lilnouns-click"
-version = "1.1.0-alpha.28"
+version = "1.1.0-alpha.29"
 authors = ["Milad Nekofar <milad@nekofar.com>"]
 edition = "2021"
 description = "A Nounish URL shortener for LilNouns DAO."
