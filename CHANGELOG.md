@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.31] - 2024-09-26
+
+### Features
+
+- Encode app URLs with percent encoding
+
+### Miscellaneous Tasks
+
+- Add `.wrangler` to `.gitignore`
+
 ## [1.1.0-alpha.30] - 2024-09-26
 
 ### Bug Fixes
