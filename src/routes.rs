@@ -156,7 +156,8 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
             <meta property="fc:frame" content="vNext" />
             <meta property="fc:frame:image" content="{}" />
             <meta property="fc:frame:button:1" content="{}" />
-            <meta property="fc:frame:link" content="https://warpcast.com/~/composer-action?url={}&view=prompt" />
+            <meta property="fc:frame:button:1:action" content="link">
+            <meta property="fc:frame:button:1:target" content="https://warpcast.com/~/composer-action?url={}&view=prompt" />
 
             <meta http-equiv="refresh" content="3; url={}" />
 
