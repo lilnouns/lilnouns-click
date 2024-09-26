@@ -664,6 +664,7 @@ dependencies = [
  "regex",
  "reqwest",
  "serde",
+ "serde_json",
  "sqids",
  "unidecode",
  "url",
