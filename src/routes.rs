@@ -1,9 +1,10 @@
 use html_escape::encode_safe;
 use html_minifier::minify;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use sqids::Sqids;
 use url::Url;
-use worker::{Request, Response, ResponseBody, RouteContext};
+use worker::{Headers, Method, Request, Response, ResponseBody, RouteContext};
 
 use crate::{
   queries::{fetch_lil_nouns_data, fetch_meta_gov_data, fetch_prop_lot_data},
@@ -345,6 +346,93 @@ pub async fn handle_creation<D>(
       }
       _ => Response::error("Bad Request", 400),
     };
+  }
+
+  Response::error("Bad Request", 400)
+}
+
+pub async fn handle_mini_app<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
+  if let Some(sqid) = ctx.param("sqid") {
+    let sqids = Sqids::default();
+    let numbers = sqids.decode(&sqid);
+
+    let community = match numbers[0] {
+      1 => Some(LilNouns),
+      _ => None,
+    };
+
+    let platform = match numbers[1] {
+      1 => Some(Ethereum),
+      2 => Some(PropLot),
+      3 => Some(MetaGov),
+      4 => Some(LilCamp),
+      _ => None,
+    };
+
+    let url = match (community, platform) {
+      (Some(LilNouns), Some(Ethereum)) => {
+        format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
+           utm_content=proposal_{}",
+          "https://lilnouns.wtf/vote", numbers[2], numbers[2]
+        )
+      }
+      (Some(LilNouns), Some(PropLot)) => {
+        format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=proplot&utm_content=idea_{}",
+          "https://lilnouns.proplot.wtf/idea", numbers[2], numbers[2]
+        )
+      }
+      (Some(LilNouns), Some(MetaGov)) => {
+        format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=metagov&\
+           utm_content=proposal_{}",
+          "https://lilnouns.wtf/vote/nounsdao", numbers[2], numbers[2]
+        )
+      }
+      (Some(LilNouns), Some(LilCamp)) => {
+        format!(
+          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
+           utm_content=proposal_{}",
+          "https://lilnouns.camp/proposals", numbers[2], numbers[2]
+        )
+      }
+      _ => String::new(),
+    };
+
+    match req.method() {
+      Method::Get => {
+        let json_response = json!({
+          "aboutUrl": "https://lilnouns.click",
+          "action": {
+            "type": "post"
+          },
+          "description": "Lil Nouns are just like Nouns, but Lil!",
+          "icon": "book",
+          "imageUrl": "https://i.imgur.com/DgSx9mw.png",
+          "name": "Lil Nouns",
+          "type": "composer"
+        });
+
+        let mut headers = Headers::new();
+        headers.set("Content-Type", "application/json").unwrap();
+
+        return Response::from_json(&json_response);
+      }
+      Method::Post => {
+        let json_response = json!({
+          "url": url,
+          "title": "Lil Nouns",
+          "type": "form"
+        });
+
+        let mut headers = Headers::new();
+        headers.set("Content-Type", "application/json").unwrap();
+
+        return Response::from_json(&json_response);
+      }
+      _ => return Response::error("Bad Request", 400),
+    }
   }
 
   Response::error("Bad Request", 400)
