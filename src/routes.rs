@@ -1,5 +1,6 @@
 use html_escape::encode_safe;
 use html_minifier::minify;
+use percent_encoding::{percent_encode, utf8_percent_encode, NON_ALPHANUMERIC};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sqids::Sqids;
@@ -121,6 +122,8 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
       .unwrap()
       .as_str()
       .replace(sqid, format!("app/{}", sqid).as_str());
+
+    let mini_app_url = utf8_percent_encode(&mini_app_url, NON_ALPHANUMERIC).to_string();
 
     let html_doc = format!(
       r#"
