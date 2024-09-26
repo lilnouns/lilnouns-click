@@ -654,7 +654,7 @@ checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
 name = "lilnouns-click"
-version = "1.1.0-alpha.27"
+version = "1.1.0-alpha.29"
 dependencies = [
  "graphql_client",
  "html-escape",
@@ -664,6 +664,7 @@ dependencies = [
  "regex",
  "reqwest",
  "serde",
+ "serde_json",
  "sqids",
  "unidecode",
  "url",

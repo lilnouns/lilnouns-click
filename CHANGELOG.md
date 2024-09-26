@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.29] - 2024-09-26
+
+### Features
+
+- Add `handle_mini_app` endpoint
+
+### Bug Fixes
+
+- Update `description` to match content
+- Update Farcaster metadata links
+
 ## [1.1.0-alpha.28] - 2024-09-26
 
 ### Bug Fixes
