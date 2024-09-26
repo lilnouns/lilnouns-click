@@ -158,6 +158,7 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
             <meta property="fc:frame:button:1" content="{}" />
             <meta property="fc:frame:button:1:action" content="link">
             <meta property="fc:frame:button:1:target" content="https://warpcast.com/~/composer-action?url={}&view=prompt" />
+            <meta property="fc:frame:post_url" content= "https://warpcast.com/~/composer-action?url={}&view=prompt">
 
             <meta http-equiv="refresh" content="3; url={}" />
 
@@ -202,6 +203,7 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
       image,                     // Farcaster Image
       "Read",                    // Farcaster Button #1
       mini_app_url,              // Farcaster Composer URL
+      mini_app_url,              // Farcaster Post URL
       url,                       // Page Refresh URL
       encode_safe(&title),       // Page Title
       encode_safe(&description), // Page Description
