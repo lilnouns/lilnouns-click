@@ -1,6 +1,5 @@
 {
 	"name": "lilnouns-click",
-	"version": "0.0.0",
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy --env dev",
