@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.33] - 2024-09-26
+
+### Features
+
+- Add Farcaster post URL meta tag
+
 ## [1.1.0-alpha.32] - 2024-09-26
 
 ### Bug Fixes
