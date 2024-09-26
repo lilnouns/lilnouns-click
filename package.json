@@ -1,13 +1,12 @@
 {
 	"name": "lilnouns-click",
-	"version": "0.0.0",
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy --env dev",
 		"dev": "wrangler dev"
 	},
 	"devDependencies": {
-		"wrangler": "3.74.0"
+		"wrangler": "3.78.8"
 	},
   "resolutions": {
     "undici": ">=5.28.4"
