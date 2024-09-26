@@ -407,7 +407,7 @@ pub async fn handle_mini_app<D>(req: Request, ctx: RouteContext<D>) -> worker::R
           "action": {
             "type": "post"
           },
-          "description": "Lil Nouns are just like Nouns, but Lil!",
+          "description": "Just like Nouns!",
           "icon": "book",
           "imageUrl": "https://i.imgur.com/DgSx9mw.png",
           "name": "Lil Nouns",
