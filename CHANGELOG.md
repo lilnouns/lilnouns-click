@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.30] - 2024-09-26
+
+### Bug Fixes
+
+- Update Farcaster Composer URL generation
+
 ## [1.1.0-alpha.29] - 2024-09-26
 
 ### Features
