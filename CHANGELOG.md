@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.32] - 2024-09-26
+
+### Bug Fixes
+
+- Update metadata for proper button action
+
 ## [1.1.0-alpha.31] - 2024-09-26
 
 ### Features
