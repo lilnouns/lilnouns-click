@@ -399,8 +399,8 @@ packages:
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
 
-  undici@6.19.0:
-    resolution: {integrity: sha512-9gGwbSLgYMjp4r6M5P9bhqhx1E+RyUIHqZE0r7BmrRoqroJUG6xlVu5TXH9DnwmCPLkcaVNrcYtxUE9d3InnyQ==}
+  undici@6.21.0:
+    resolution: {integrity: sha512-BUgJXc752Kou3oOIuU1i+yZZypyZRqNPW0vqoMPl8VaoalSfeR0D8/t4iAS3yirs79SSMTxTag+ZC86uswv+Cw==}
     engines: {node: '>=18.17'}
 
   unenv-nightly@2.0.0-20241111-080453-894aa31:
@@ -668,7 +668,7 @@ snapshots:
       exit-hook: 2.2.1
       glob-to-regexp: 0.4.1
       stoppable: 1.1.0
-      undici: 6.19.0
+      undici: 6.21.0
       workerd: 1.20241106.1
       ws: 8.18.0
       youch: 3.3.3
@@ -744,7 +744,7 @@ snapshots:
 
   undici-types@5.26.5: {}
 
-  undici@6.19.0: {}
+  undici@6.21.0: {}
 
   unenv-nightly@2.0.0-20241111-080453-894aa31:
     dependencies:
