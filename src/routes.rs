@@ -1,6 +1,6 @@
 use html_escape::encode_safe;
 use html_minifier::minify;
-use percent_encoding::{percent_encode, utf8_percent_encode, NON_ALPHANUMERIC};
+use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sqids::Sqids;
