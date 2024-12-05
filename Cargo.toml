@@ -18,32 +18,32 @@ crate-type = ["cdylib"]
 
 [dependencies]
 axum = { version = "0.7.5", default-features = false, features = ["original-uri", "json"] }
-axum-macros = "0.4.2"
 axum-cloudflare-adapter = "0.13.0"
+axum-macros = "0.4.2"
+console_error_panic_hook = { version = "0.1.1" }
 graphql_client = { version = "0.14.0", features = ["reqwest"] }
 html-escape = { version = "0.2.13", default-features = false }
 html-minifier = { version = "5.0.0", default-features = false }
 log = { version = "0.4.22", features = [] }
+mio = "1.0.3"
+oneshot = "0.1.8"
 percent-encoding = "2.3.1"
 regex = "1.11.1"
 reqwest = "0.11.26"
 serde = { version = "1.0.215", features = ["derive"] }
-sqids = "0.4.1"
-tower-service = "0.3.2"
-unidecode = "0.3.0"
-url = "2.5.4"
-worker = { version = "0.4.2", features = ["http", "axum"] }
-worker-macros = { version = "0.4.2", features = ["http"] }
 serde_json = "1.0.133"
-console_error_panic_hook = { version = "0.1.1" }
-tower-http = { version = "0.6.2", features = ["trace"] }
-tracing = "0.1.40"
+sqids = "0.4.1"
 tokio = { version = "1.42.0", default-features = false, features = ["sync"] }
 tokio-macros = "2.4.0"
-mio = "1.0.3"
+tower-http = { version = "0.6.2", features = ["trace"] }
+tower-service = "0.3.2"
+tracing = "0.1.40"
+unidecode = "0.3.0"
+url = "2.5.4"
 wasm-bindgen = "0.2.1"
 wasm-bindgen-futures = "0.4.47"
-oneshot = "0.1.8"
+worker = { version = "0.4.2", features = ["http", "axum"] }
+worker-macros = { version = "0.4.2", features = ["http"] }
 
 [profile.release]
 lto = true
