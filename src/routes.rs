@@ -71,11 +71,11 @@ pub(crate) async fn handle_redirect(
 
   let (url, title, description, image) = match (community, platform) {
     (Some(LilNouns), Some(Ethereum)) => {
-      let url = format!(
-        "{}/{}?utm_source=farcaster&utm_medium=social& \
-         utm_campaign=governor&utm_content=proposal_{}",
-        "https://lilnouns.wtf/vote", numbers[2], numbers[2]
+      let utm = format!(
+        "utm_source=farcaster&utm_medium=social&utm_campaign=governor&utm_content=proposal_{}",
+        numbers[2]
       );
+      let url = format!("{}/{}?{}", "https://lilnouns.wtf/vote", numbers[2], utm);
       let (title, description) = fetch_lil_nouns_data(&env, numbers[2])
         .await
         .unwrap_or_default();
@@ -83,9 +83,13 @@ pub(crate) async fn handle_redirect(
       (url, title, description, image)
     }
     (Some(LilNouns), Some(PropLot)) => {
+      let utm = format!(
+        "utm_source=farcaster&utm_medium=social&utm_campaign=proplot&utm_content=idea_{}",
+        numbers[2]
+      );
       let url = format!(
-        "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=proplot&utm_content=idea_{}",
-        "https://lilnouns.proplot.wtf/idea", numbers[2], numbers[2]
+        "{}/{}?{}",
+        "https://lilnouns.proplot.wtf/idea", numbers[2], utm
       );
       let (title, description) = fetch_prop_lot_data(&env, numbers[2])
         .await
@@ -94,9 +98,13 @@ pub(crate) async fn handle_redirect(
       (url, title, description, image)
     }
     (Some(LilNouns), Some(MetaGov)) => {
+      let utm = format!(
+        "utm_source=farcaster&utm_medium=social&utm_campaign=metagov&utm_content=proposal_{}",
+        numbers[2]
+      );
       let url = format!(
-        "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=metagov&utm_content=proposal_{}",
-        "https://lilnouns.wtf/vote/nounsdao", numbers[2], numbers[2]
+        "{}/{}?{}",
+        "https://lilnouns.wtf/vote/nounsdao", numbers[2], utm
       );
       let (title, description) = fetch_meta_gov_data(&env, numbers[2])
         .await
@@ -105,10 +113,13 @@ pub(crate) async fn handle_redirect(
       (url, title, description, image)
     }
     (Some(LilNouns), Some(LilCamp)) => {
+      let utm = format!(
+        "utm_source=farcaster&utm_medium=social&utm_campaign=governor&tm_content=proposal_{}",
+        numbers[2]
+      );
       let url = format!(
-        "{}/{}?utm_source=farcaster&utm_medium=social& \
-         utm_campaign=governor&tm_content=proposal_{}",
-        "https://lilnouns.camp/proposals", numbers[2], numbers[2]
+        "{}/{}?{}",
+        "https://lilnouns.camp/proposals", numbers[2], utm
       );
       let (title, description) = fetch_lil_nouns_data(&env, numbers[2])
         .await
