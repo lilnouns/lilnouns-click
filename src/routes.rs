@@ -290,8 +290,8 @@ pub(crate) async fn handle_creation(Json(payload): Json<UrlPayload>) -> impl Int
         }
 
         if segments[1] == "nounsdao" {
-          numbers.push(Community::LilNouns as u64);
-          numbers.push(Platform::MetaGov as u64);
+          numbers.push(LilNouns as u64);
+          numbers.push(MetaGov as u64);
           numbers.push(
             segments[2]
               .parse::<u32>()
@@ -300,8 +300,8 @@ pub(crate) async fn handle_creation(Json(payload): Json<UrlPayload>) -> impl Int
               .expect("Failed to convert number"),
           );
         } else {
-          numbers.push(Community::LilNouns as u64);
-          numbers.push(Platform::Ethereum as u64);
+          numbers.push(LilNouns as u64);
+          numbers.push(Ethereum as u64);
           numbers.push(
             segments[1]
               .parse::<u32>()
@@ -318,7 +318,7 @@ pub(crate) async fn handle_creation(Json(payload): Json<UrlPayload>) -> impl Int
         .into_response()
       }
       Some("lilnouns.proplot.wtf") | Some("www.lilnouns.proplot.wtf") => {
-        numbers.push(Community::LilNouns as u64);
+        numbers.push(LilNouns as u64);
 
         let segments: Vec<_> = url
           .path_segments()
@@ -329,7 +329,7 @@ pub(crate) async fn handle_creation(Json(payload): Json<UrlPayload>) -> impl Int
           return (StatusCode::BAD_REQUEST, "Bad Request").into_response();
         }
 
-        numbers.push(Platform::PropLot as u64);
+        numbers.push(PropLot as u64);
         numbers.push(
           segments[1]
             .parse::<u32>()
@@ -345,7 +345,7 @@ pub(crate) async fn handle_creation(Json(payload): Json<UrlPayload>) -> impl Int
         .into_response()
       }
       Some("lilnouns.camp") | Some("www.lilnouns.camp") => {
-        numbers.push(Community::LilNouns as u64);
+        numbers.push(LilNouns as u64);
 
         let segments: Vec<_> = url
           .path_segments()
@@ -356,7 +356,7 @@ pub(crate) async fn handle_creation(Json(payload): Json<UrlPayload>) -> impl Int
           return (StatusCode::BAD_REQUEST, "Bad Request").into_response();
         }
 
-        numbers.push(Platform::LilCamp as u64);
+        numbers.push(LilCamp as u64);
         numbers.push(
           segments[1]
             .parse::<u32>()
