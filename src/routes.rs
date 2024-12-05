@@ -1,11 +1,9 @@
 use html_escape::encode_safe;
 use html_minifier::minify;
-use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use sqids::Sqids;
 use url::Url;
-use worker::{Headers, Method, Request, Response, ResponseBody, RouteContext};
+use worker::{Request, Response, ResponseBody, RouteContext};
 
 use crate::{
   queries::{fetch_lil_nouns_data, fetch_meta_gov_data, fetch_prop_lot_data},
@@ -37,7 +35,7 @@ pub enum Platform {
 
 pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
   if let Some(sqid) = ctx.param("sqid") {
-    let ga_id = ctx.secret("GA_ID").unwrap();
+    let ga_id = ctx.secret("GA_ID")?;
     let sqids = Sqids::default();
     let numbers = sqids.decode(&sqid);
 
@@ -63,10 +61,8 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         );
         let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
         let image = req
-          .url()
-          .unwrap()
-          .join(format!("{}/og.png", sqid).as_str())
-          .unwrap()
+          .url()?
+          .join(format!("{}/og.png", sqid).as_str())?
           .to_string();
         (url, title, description, image)
       }
@@ -77,10 +73,8 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         );
         let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
         let image = req
-          .url()
-          .unwrap()
-          .join(format!("{}/og.png", sqid).as_str())
-          .unwrap()
+          .url()?
+          .join(format!("{}/og.png", sqid).as_str())?
           .to_string();
         (url, title, description, image)
       }
@@ -92,10 +86,8 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         );
         let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
         let image = req
-          .url()
-          .unwrap()
-          .join(format!("{}/og.png", sqid).as_str())
-          .unwrap()
+          .url()?
+          .join(format!("{}/og.png", sqid).as_str())?
           .to_string();
         (url, title, description, image)
       }
@@ -107,23 +99,13 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         );
         let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
         let image = req
-          .url()
-          .unwrap()
-          .join(format!("{}/og.png", sqid).as_str())
-          .unwrap()
+          .url()?
+          .join(format!("{}/og.png", sqid).as_str())?
           .to_string();
         (url, title, description, image)
       }
       _ => (String::new(), String::new(), String::new(), String::new()),
     };
-
-    let mini_app_url = req
-      .url()
-      .unwrap()
-      .as_str()
-      .replace(sqid, format!("app/{}", sqid).as_str());
-
-    let mini_app_url = utf8_percent_encode(&mini_app_url, NON_ALPHANUMERIC).to_string();
 
     let html_doc = format!(
       r#"
@@ -155,10 +137,6 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
 
             <meta property="fc:frame" content="vNext" />
             <meta property="fc:frame:image" content="{}" />
-            <meta property="fc:frame:button:1" content="{}" />
-            <meta property="fc:frame:button:1:action" content="link">
-            <meta property="fc:frame:button:1:target" content="https://warpcast.com/~/composer-action?url={}&view=prompt" />
-            <meta property="fc:frame:post_url" content= "https://warpcast.com/~/composer-action?url={}&view=prompt">
 
             <meta http-equiv="refresh" content="3; url={}" />
 
@@ -201,9 +179,6 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
       encode_safe(&description), // Twitter Description
       image,                     // Twitter Image
       image,                     // Farcaster Image
-      "Read",                    // Farcaster Button #1
-      mini_app_url,              // Farcaster Composer URL
-      mini_app_url,              // Farcaster Post URL
       url,                       // Page Refresh URL
       encode_safe(&title),       // Page Title
       encode_safe(&description), // Page Description
@@ -219,7 +194,7 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
 
     return match response {
       Ok(mut res) => {
-        res.headers_mut().set("Content-Type", "text/html").unwrap();
+        res.headers_mut().set("Content-Type", "text/html")?;
         return Ok(res);
       }
       Err(e) => Err(e),
@@ -298,11 +273,11 @@ pub async fn handle_creation<D>(
         if segments[1] == "nounsdao" {
           numbers.push(LilNouns as u64);
           numbers.push(MetaGov as u64);
-          numbers.push(segments[2].parse::<u32>().unwrap().try_into().unwrap());
+          numbers.push(segments[2].parse::<u32>().unwrap().try_into()?);
         } else {
           numbers.push(LilNouns as u64);
           numbers.push(Ethereum as u64);
-          numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
+          numbers.push(segments[1].parse::<u32>().unwrap().try_into()?);
         }
 
         Response::from_json(&UrlPayload {
@@ -321,7 +296,7 @@ pub async fn handle_creation<D>(
 
         if segments[0] == "idea" {
           numbers.push(PropLot as u64);
-          numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
+          numbers.push(segments[1].parse::<u32>().unwrap().try_into()?);
         } else {
           return Response::error("Bad Request", 400);
         }
@@ -346,7 +321,7 @@ pub async fn handle_creation<D>(
 
         if segments[0] == "proposals" {
           numbers.push(LilCamp as u64);
-          numbers.push(segments[1].parse::<u32>().unwrap().try_into().unwrap());
+          numbers.push(segments[1].parse::<u32>().unwrap().try_into()?);
         } else {
           return Response::error("Bad Request", 400);
         }
@@ -358,93 +333,6 @@ pub async fn handle_creation<D>(
       }
       _ => Response::error("Bad Request", 400),
     };
-  }
-
-  Response::error("Bad Request", 400)
-}
-
-pub async fn handle_mini_app<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
-  if let Some(sqid) = ctx.param("sqid") {
-    let sqids = Sqids::default();
-    let numbers = sqids.decode(&sqid);
-
-    let community = match numbers[0] {
-      1 => Some(LilNouns),
-      _ => None,
-    };
-
-    let platform = match numbers[1] {
-      1 => Some(Ethereum),
-      2 => Some(PropLot),
-      3 => Some(MetaGov),
-      4 => Some(LilCamp),
-      _ => None,
-    };
-
-    let url = match (community, platform) {
-      (Some(LilNouns), Some(Ethereum)) => {
-        format!(
-          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
-           utm_content=proposal_{}",
-          "https://lilnouns.wtf/vote", numbers[2], numbers[2]
-        )
-      }
-      (Some(LilNouns), Some(PropLot)) => {
-        format!(
-          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=proplot&utm_content=idea_{}",
-          "https://lilnouns.proplot.wtf/idea", numbers[2], numbers[2]
-        )
-      }
-      (Some(LilNouns), Some(MetaGov)) => {
-        format!(
-          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=metagov&\
-           utm_content=proposal_{}",
-          "https://lilnouns.wtf/vote/nounsdao", numbers[2], numbers[2]
-        )
-      }
-      (Some(LilNouns), Some(LilCamp)) => {
-        format!(
-          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
-           utm_content=proposal_{}",
-          "https://lilnouns.camp/proposals", numbers[2], numbers[2]
-        )
-      }
-      _ => String::new(),
-    };
-
-    match req.method() {
-      Method::Get => {
-        let json_response = json!({
-          "aboutUrl": "https://lilnouns.click",
-          "action": {
-            "type": "post"
-          },
-          "description": "Just like Nouns!",
-          "icon": "book",
-          "imageUrl": "https://i.imgur.com/DgSx9mw.png",
-          "name": "Lil Nouns",
-          "type": "composer"
-        });
-
-        let mut headers = Headers::new();
-        headers.set("Content-Type", "application/json").unwrap();
-
-        return Response::from_json(&json_response);
-      }
-      Method::Post => {
-        let json_response = json!({
-          "url": url,
-          "title": "Lil Nouns",
-          "type": "form"
-        });
-
-        let mut headers = Headers::new();
-        headers.set("Content-Type", "application/json").unwrap();
-
-        return Response::from_json(&json_response);
-      }
-      _ => return Response::error("Bad Request", 400),
-    }
   }
 
   Response::error("Bad Request", 400)

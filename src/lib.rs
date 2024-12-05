@@ -18,7 +18,6 @@ async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
     .get_async("/:sqid", routes::handle_redirect)
     .get_async("/:sqid/og.png", routes::handle_og_image)
     .post_async("/", routes::handle_creation)
-    .on_async("/app/:sqid", routes::handle_mini_app)
     .run(req, env)
     .await
 }
