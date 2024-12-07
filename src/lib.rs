@@ -16,7 +16,7 @@ async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
       )?)
     })
     .get_async("/:sqid", handlers::handle_redirect)
-    .get_async("/:sqid/og.png", handlers::handle_og_image)
+    .get_async("/:sqid/og.png", handlers::generate_og_image)
     .post_async("/", handlers::handle_creation)
     .run(req, env)
     .await

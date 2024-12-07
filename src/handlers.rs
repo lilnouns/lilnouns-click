@@ -232,7 +232,7 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
   Response::error("Bad Request", 400)
 }
 
-pub async fn handle_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
+pub async fn generate_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
   if let Some(sqid) = ctx.param("sqid") {
     let decoded = decode_sqid(&sqid).ok_or_else(|| Error::from("Invalid SQID"))?;
 
