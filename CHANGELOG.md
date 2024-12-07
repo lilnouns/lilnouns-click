@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-alpha.36] - 2024-12-07
+
+### Features
+
+- Add `OpenGraphMeta` struct for HTML meta tags
+
+### Bug Fixes
+
+- Correct typo in `farcaster_meta` HTML tag
+
+### Refactor
+
+- Remove `handle_mini_app` function
+- Rename `routes` module to `handlers`
+- Rename `utils` module to `helpers`
+- Simplify SQID handling logic
+- Rename `handle_og_image` to `generate_og_image`
+- Rename functions for clarity
+
+### Styling
+
+- Remove redundant comments
+
 ## [1.1.0-alpha.35] - 2024-12-04
 
 ### Bug Fixes

@@ -1,24 +1,21 @@
 use url::Url;
 use worker::{event, Context, Env, Request, Response, Result, Router};
 
+mod handlers;
+mod helpers;
 mod queries;
-mod routes;
-mod utils;
 
 #[event(fetch)]
 async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
-  let router = Router::new();
-
-  router
+  Router::new()
     .get("/", |_, _| {
       Response::redirect(Url::parse(
         "https://lilnouns.camp?utm_source=farcaster&utm_medium=social",
       )?)
     })
-    .get_async("/:sqid", routes::handle_redirect)
-    .get_async("/:sqid/og.png", routes::handle_og_image)
-    .post_async("/", routes::handle_creation)
-    .on_async("/app/:sqid", routes::handle_mini_app)
+    .get_async("/:sqid", handlers::generate_redirect_page)
+    .get_async("/:sqid/og.png", handlers::generate_og_image_url)
+    .post_async("/", handlers::generate_from_url)
     .run(req, env)
     .await
 }

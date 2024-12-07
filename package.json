@@ -1,14 +1,15 @@
 {
-	"name": "lilnouns-click",
-	"private": true,
-	"scripts": {
-		"deploy": "wrangler deploy --env dev",
-		"dev": "wrangler dev"
-	},
-	"devDependencies": {
-		"wrangler": "3.92.0"
-	},
+  "name": "lilnouns-click",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy --env dev",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "3.92.0"
+  },
   "resolutions": {
-    "undici": ">=5.28.4"
+    "undici": ">=5.28.4",
+    "cookie": ">=0.7.0"
   }
 }

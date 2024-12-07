@@ -1,12 +1,13 @@
 [package]
 name = "lilnouns-click"
-version = "1.1.0-alpha.35"
+version = "1.1.0-alpha.36"
 authors = ["Milad Nekofar <milad@nekofar.com>"]
 edition = "2021"
 description = "A Nounish URL shortener for LilNouns DAO."
 repository = "https://github.com/lilnouns/lilnouns-click"
 license = "Apache-2.0"
 include = ["*.graphql"]
+rust-version = "1.83.0"
 
 # https://github.com/rustwasm/wasm-pack/issues/1247
 [package.metadata.wasm-pack.profile.release]

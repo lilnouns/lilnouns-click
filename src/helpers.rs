@@ -2,7 +2,7 @@ use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
 use regex::Regex;
 use unidecode::unidecode;
 
-use crate::routes::Platform;
+use crate::handlers::Platform;
 
 pub fn truncate_and_clean_string(input: &str, limit: usize) -> String {
   // Check if the first line contains "#"
