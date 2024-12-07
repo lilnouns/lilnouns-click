@@ -1,4 +1,4 @@
-use html_escape::encode_safe;
+use html_escape::{encode_safe, encode_text, encode_text_minimal};
 use html_minifier::minify;
 use serde::{Deserialize, Serialize};
 use sqids::Sqids;
@@ -92,6 +92,45 @@ fn build_image_url(url: &Url, sqid: &str) -> String {
     .map_or_else(|_| String::new(), |full_url| full_url.to_string())
 }
 
+#[derive(Serialize)]
+struct Frame {
+  #[serde(rename = "version")]
+  version: String,
+
+  #[serde(rename = "imageUrl")]
+  image_url: String,
+
+  #[serde(rename = "button")]
+  button: Button,
+}
+
+#[derive(Serialize)]
+struct Button {
+  #[serde(rename = "title")]
+  title: String,
+
+  #[serde(rename = "action")]
+  action: Action,
+}
+
+#[derive(Serialize)]
+struct Action {
+  #[serde(rename = "type")]
+  r#type: String,
+
+  #[serde(rename = "name")]
+  name: String,
+
+  #[serde(rename = "url")]
+  url: String,
+
+  #[serde(rename = "splashImageUrl")]
+  splash_image_url: String,
+
+  #[serde(rename = "splashBackgroundColor")]
+  splash_background_color: String,
+}
+
 struct OpenGraphMeta {
   title: String,
   description: String,
@@ -101,12 +140,26 @@ struct OpenGraphMeta {
 
 impl OpenGraphMeta {
   fn to_html(&self) -> String {
+    let frame = Frame {
+      version: String::from("next"),
+      image_url: self.image.clone(),
+      button: Button {
+        title: String::from("Read More"),
+        action: Action {
+          r#type: String::from("launch_frame"),
+          name: String::from(self.title.clone()),
+          url: self.url.clone(),
+          splash_image_url: "/splash.png".parse().unwrap(),
+          splash_background_color: String::from("#f7f7f7"),
+        },
+      },
+    };
+
     let farcaster_meta = format!(
       r#"
-      <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="{image}" />
+      <meta property="fc:frame" content='{frame}' />
       "#,
-      image = self.image,
+      frame = encode_text_minimal(&serde_json::to_string(&frame).unwrap()),
     );
 
     format!(
