@@ -33,6 +33,46 @@ pub enum Platform {
   LilCamp = 4,
 }
 
+struct OpenGraphMeta {
+  title: String,
+  description: String,
+  image: String,
+  url: String,
+}
+
+impl OpenGraphMeta {
+  fn to_html(&self) -> String {
+    let farcaster_meta = format!(
+      r#"
+      <meta property="fc:frame" content="vNext" />
+      <meta property="fc:frame:image" content="{image}\" />
+      "#,
+      image = self.image,
+    );
+
+    format!(
+      r#"
+      <meta property="og:site_name" content="Lil Nouns">
+      <meta property="og:url" content="{url}">
+      <meta property="og:type" content="website">
+      <meta property="og:title" content="{title}">
+      <meta property="og:description" content="{description}">
+      <meta property="og:image" content="{image}">
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:title" content="{title}">
+      <meta name="twitter:description" content="{description}">
+      <meta name="twitter:image" content="{image}">
+      {farcaster_meta}
+      "#,
+      url = self.url,
+      title = encode_safe(&self.title),
+      description = encode_safe(&self.description),
+      image = self.image,
+      farcaster_meta = farcaster_meta,
+    )
+  }
+}
+
 pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
   if let Some(sqid) = ctx.param("sqid") {
     let ga_id = ctx.secret("GA_ID")?;
@@ -107,6 +147,13 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
       _ => (String::new(), String::new(), String::new(), String::new()),
     };
 
+    let og_meta = OpenGraphMeta {
+      title: title.clone(),
+      description: description.clone(),
+      image,
+      url: url.clone(),
+    };
+
     let html_doc = format!(
       r#"
         <!DOCTYPE html>
@@ -114,47 +161,24 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            {og_meta}
+            <meta http-equiv="refresh" content="3; url={url}" />
 
-            <meta property="og:site_name" content="Lil Nouns">
-            <meta property="og:url" content="{}">
-            <meta property="og:type" content="website">
-            <meta property="og:title" content="{}">
-            <meta property="og:description" content="{}">
-
-            <meta property="og:image" content="{}">
-            <meta property="og:image:secure_url" content="{}" />
-            <meta property="og:image:type" content="image/png" />
-            <meta property="og:image:width" content="1200" />
-            <meta property="og:image:height" content="630" />
-            <meta property="og:image:alt" content="{}" />
-
-            <meta name="twitter:card" content="summary_large_image">
-            <meta property="twitter:domain" content="lilnouns.click">
-            <meta property="twitter:url" content="{}">
-            <meta name="twitter:title" content="{}">
-            <meta name="twitter:description" content="{}">
-            <meta name="twitter:image" content="{}">
-
-            <meta property="fc:frame" content="vNext" />
-            <meta property="fc:frame:image" content="{}" />
-
-            <meta http-equiv="refresh" content="3; url={}" />
-
-            <title>{}</title>
-            <meta name="description" content="{}">
+            <title>{title}</title>
+            <meta name="description" content="{description}">
 
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap" rel="stylesheet">
 
             <!-- Google tag (gtag.js) -->
-            <script async src="https://www.googletagmanager.com/gtag/js?id={}"></script>
+            <script async src="https://www.googletagmanager.com/gtag/js?id={ga_id}"></script>
             <script>
               window.dataLayer = window.dataLayer || [];
               function gtag(){{dataLayer.push(arguments);}}
               gtag('js', new Date());
 
-              gtag('config', '{}');
+              gtag('config', '{ga_id}');
             </script>
         </head>
         <body style="margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; font-family: 'Londrina Solid', cursive;">
@@ -162,30 +186,17 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
                 <div style="padding: 20px;">
                     <img src="https://lilnouns.wtf/static/media/lil-loading-skull.b7a846e1.gif" alt="Loading Skull" style="width: 192px; height: 192px;">
                     <p style="margin-top: 10px; font-size: 24px; font-weight: bold;">Redirecting...</p>
-                    <p><a style="font-size: 24px; text-decoration: none;" href="{}">{}</a></p>
+                    <p><a style="font-size: 24px; text-decoration: none;" href="{url}">{title}</a></p>
                 </div>
             </div>
         </body>
         </html>
     "#,
-      url,                       // OpenGraph URL
-      encode_safe(&title),       // OpenGraph Title
-      encode_safe(&description), // OpenGraph Description
-      image,                     // OpenGraph Image URL
-      image,                     // OpenGraph Image Secure URL
-      encode_safe(&title),       // OpenGraph Image Alt
-      url,                       // Twitter URL
-      encode_safe(&title),       // Twitter Title
-      encode_safe(&description), // Twitter Description
-      image,                     // Twitter Image
-      image,                     // Farcaster Image
-      url,                       // Page Refresh URL
-      encode_safe(&title),       // Page Title
-      encode_safe(&description), // Page Description
-      ga_id,                     // Google Analytics ID
-      ga_id,                     // Google Analytics ID
-      url,                       // Page Content Link URL
-      encode_safe(&title),       // Page Content Link Title
+      og_meta = og_meta.to_html(),
+      url = url,                               // Page URL
+      title = encode_safe(&title),             // Page Title
+      description = encode_safe(&description), // Page Description
+      ga_id = ga_id,                           // Google Analytics ID
     );
 
     let minified_html = minify(html_doc).expect("Failed to minify HTML");
