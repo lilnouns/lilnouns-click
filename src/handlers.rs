@@ -3,7 +3,7 @@ use html_minifier::minify;
 use serde::{Deserialize, Serialize};
 use sqids::Sqids;
 use url::Url;
-use worker::{Request, Response, ResponseBody, RouteContext};
+use worker::{Error, Request, Response, ResponseBody, RouteContext};
 
 use crate::{
   handlers::{
@@ -25,12 +25,71 @@ pub enum Community {
   LilNouns = 1,
 }
 
+impl Community {
+  fn from_id(id: u64) -> Option<Self> {
+    match id {
+      1 => Some(LilNouns),
+      _ => None,
+    }
+  }
+}
+
 #[derive(Debug, PartialEq)]
 pub enum Platform {
   Ethereum = 1,
   PropLot = 2,
   MetaGov = 3,
   LilCamp = 4,
+}
+
+impl Platform {
+  fn from_id(id: u64) -> Option<Self> {
+    match id {
+      1 => Some(Ethereum),
+      2 => Some(PropLot),
+      3 => Some(MetaGov),
+      4 => Some(LilCamp),
+      _ => None,
+    }
+  }
+}
+
+struct DecodedSqid {
+  community: Community,
+  platform: Platform,
+  id: u64,
+}
+
+fn decode_sqid(sqid: &str) -> Option<DecodedSqid> {
+  let sqids = Sqids::default();
+  let numbers = sqids.decode(sqid);
+
+  if numbers.len() < 3 {
+    return None;
+  }
+
+  let community = Community::from_id(numbers[0])?;
+  let platform = Platform::from_id(numbers[1])?;
+  let id = numbers[2];
+
+  Some(DecodedSqid {
+    community,
+    platform,
+    id,
+  })
+}
+
+fn build_url(base_url: &str, id: u64, campaign: &str) -> String {
+  format!(
+    "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign={}&utm_content=proposal_{}",
+    base_url, id, campaign, id
+  )
+}
+
+fn build_image_url(url: &Url, sqid: &str) -> String {
+  url
+    .join(&format!("{}/og.png", sqid))
+    .map_or_else(|_| String::new(), |full_url| full_url.to_string())
 }
 
 struct OpenGraphMeta {
@@ -76,75 +135,33 @@ impl OpenGraphMeta {
 pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
   if let Some(sqid) = ctx.param("sqid") {
     let ga_id = ctx.secret("GA_ID")?;
-    let sqids = Sqids::default();
-    let numbers = sqids.decode(&sqid);
+    let decoded = decode_sqid(&sqid).ok_or_else(|| Error::from("Invalid SQID"))?;
 
-    let community = match numbers[0] {
-      1 => Some(LilNouns),
-      _ => None,
-    };
-
-    let platform = match numbers[1] {
-      1 => Some(Ethereum),
-      2 => Some(PropLot),
-      3 => Some(MetaGov),
-      4 => Some(LilCamp),
-      _ => None,
-    };
-
-    let (url, title, description, image) = match (community, platform) {
-      (Some(LilNouns), Some(Ethereum)) => {
-        let url = format!(
-          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
-           utm_content=proposal_{}",
-          "https://lilnouns.wtf/vote", numbers[2], numbers[2]
-        );
-        let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-        let image = req
-          .url()?
-          .join(format!("{}/og.png", sqid).as_str())?
-          .to_string();
+    let (url, title, description, image) = match (decoded.community, decoded.platform) {
+      (LilNouns, Ethereum) => {
+        let url = build_url("https://lilnouns.wtf/vote", decoded.id, "governor");
+        let (title, description) = fetch_lil_nouns_data(&ctx.env, decoded.id).await?;
+        let image = build_image_url(&req.url()?, &sqid);
         (url, title, description, image)
       }
-      (Some(LilNouns), Some(PropLot)) => {
-        let url = format!(
-          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=proplot&utm_content=idea_{}",
-          "https://lilnouns.proplot.wtf/idea", numbers[2], numbers[2]
-        );
-        let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
-        let image = req
-          .url()?
-          .join(format!("{}/og.png", sqid).as_str())?
-          .to_string();
+      (LilNouns, PropLot) => {
+        let url = build_url("https://lilnouns.proplot.wtf/idea", decoded.id, "proplot");
+        let (title, description) = fetch_prop_lot_data(&ctx.env, decoded.id).await?;
+        let image = build_image_url(&req.url()?, &sqid);
         (url, title, description, image)
       }
-      (Some(LilNouns), Some(MetaGov)) => {
-        let url = format!(
-          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=metagov&\
-           utm_content=proposal_{}",
-          "https://lilnouns.wtf/vote/nounsdao", numbers[2], numbers[2]
-        );
-        let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
-        let image = req
-          .url()?
-          .join(format!("{}/og.png", sqid).as_str())?
-          .to_string();
+      (LilNouns, MetaGov) => {
+        let url = build_url("https://lilnouns.wtf/vote/nounsdao", decoded.id, "metagov");
+        let (title, description) = fetch_meta_gov_data(&ctx.env, decoded.id).await?;
+        let image = build_image_url(&req.url()?, &sqid);
         (url, title, description, image)
       }
-      (Some(LilNouns), Some(LilCamp)) => {
-        let url = format!(
-          "{}/{}?utm_source=farcaster&utm_medium=social&utm_campaign=governor&\
-           utm_content=proposal_{}",
-          "https://lilnouns.camp/proposals", numbers[2], numbers[2]
-        );
-        let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-        let image = req
-          .url()?
-          .join(format!("{}/og.png", sqid).as_str())?
-          .to_string();
+      (LilNouns, LilCamp) => {
+        let url = build_url("https://lilnouns.camp/proposals", decoded.id, "governor");
+        let (title, description) = fetch_lil_nouns_data(&ctx.env, decoded.id).await?;
+        let image = build_image_url(&req.url()?, &sqid);
         (url, title, description, image)
       }
-      _ => (String::new(), String::new(), String::new(), String::new()),
     };
 
     let og_meta = OpenGraphMeta {
@@ -217,40 +234,25 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
 
 pub async fn handle_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
   if let Some(sqid) = ctx.param("sqid") {
-    let sqids = Sqids::default();
-    let numbers = sqids.decode(&sqid);
+    let decoded = decode_sqid(&sqid).ok_or_else(|| Error::from("Invalid SQID"))?;
 
-    let community = match numbers[0] {
-      1 => Some(LilNouns),
-      _ => None,
-    };
-
-    let platform = match numbers[1] {
-      1 => Some(Ethereum),
-      2 => Some(PropLot),
-      3 => Some(MetaGov),
-      4 => Some(LilCamp),
-      _ => None,
-    };
-
-    let image = match (community, platform) {
-      (Some(LilNouns), Some(Ethereum)) => {
-        let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-        create_og_image(numbers[2], &title.to_uppercase(), &description, Ethereum)
+    let image = match (decoded.community, decoded.platform) {
+      (LilNouns, Ethereum) => {
+        let (title, description) = fetch_lil_nouns_data(&ctx.env, decoded.id).await?;
+        create_og_image(decoded.id, &title.to_uppercase(), &description, Ethereum)
       }
-      (Some(LilNouns), Some(PropLot)) => {
-        let (title, description) = fetch_prop_lot_data(&ctx.env, numbers[2]).await?;
-        create_og_image(numbers[2], &title.to_uppercase(), &description, PropLot)
+      (LilNouns, PropLot) => {
+        let (title, description) = fetch_prop_lot_data(&ctx.env, decoded.id).await?;
+        create_og_image(decoded.id, &title.to_uppercase(), &description, PropLot)
       }
-      (Some(LilNouns), Some(MetaGov)) => {
-        let (title, description) = fetch_meta_gov_data(&ctx.env, numbers[2]).await?;
-        create_og_image(numbers[2], &title.to_uppercase(), &description, MetaGov)
+      (LilNouns, MetaGov) => {
+        let (title, description) = fetch_meta_gov_data(&ctx.env, decoded.id).await?;
+        create_og_image(decoded.id, &title.to_uppercase(), &description, MetaGov)
       }
-      (Some(LilNouns), Some(LilCamp)) => {
-        let (title, description) = fetch_lil_nouns_data(&ctx.env, numbers[2]).await?;
-        create_og_image(numbers[2], &title.to_uppercase(), &description, LilCamp)
+      (LilNouns, LilCamp) => {
+        let (title, description) = fetch_lil_nouns_data(&ctx.env, decoded.id).await?;
+        create_og_image(decoded.id, &title.to_uppercase(), &description, LilCamp)
       }
-      _ => String::new(),
     };
 
     return Response::redirect(Url::parse(&*image)?);
