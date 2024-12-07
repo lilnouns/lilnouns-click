@@ -6,11 +6,11 @@ use url::Url;
 use worker::{Request, Response, ResponseBody, RouteContext};
 
 use crate::{
-  queries::{fetch_lil_nouns_data, fetch_meta_gov_data, fetch_prop_lot_data},
-  routes::{
+  handlers::{
     Community::LilNouns,
     Platform::{Ethereum, LilCamp, MetaGov, PropLot},
   },
+  queries::{fetch_lil_nouns_data, fetch_meta_gov_data, fetch_prop_lot_data},
   utils::create_og_image,
 };
 
