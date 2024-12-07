@@ -210,10 +210,10 @@ pub async fn generate_redirect_page<D>(req: Request, ctx: RouteContext<D>) -> Re
         </html>
     "#,
       og_meta = og_meta.to_html(),
-      url = url,                               // Page URL
-      title = encode_safe(&title),             // Page Title
-      description = encode_safe(&description), // Page Description
-      ga_id = ga_id,                           // Google Analytics ID
+      url = url,
+      title = encode_safe(&title),
+      description = encode_safe(&description),
+      ga_id = ga_id,
     );
 
     let minified_html = minify(html_doc).expect("Failed to minify HTML");
