@@ -104,7 +104,7 @@ impl OpenGraphMeta {
     let farcaster_meta = format!(
       r#"
       <meta property="fc:frame" content="vNext" />
-      <meta property="fc:frame:image" content="{image}\" />
+      <meta property="fc:frame:image" content="{image}" />
       "#,
       image = self.image,
     );
