@@ -149,7 +149,7 @@ impl OpenGraphMeta {
           r#type: String::from("launch_frame"),
           name: String::from(self.title.clone()),
           url: self.url.clone(),
-          splash_image_url: "/splash.png".parse().unwrap(),
+          splash_image_url: "https://lilnouns.wtf/static/media/lil-loading-skull.b7a846e1.gif".parse().unwrap(),
           splash_background_color: String::from("#f7f7f7"),
         },
       },
