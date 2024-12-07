@@ -1,4 +1,4 @@
-use html_escape::{encode_safe, encode_text, encode_text_minimal};
+use html_escape::{encode_double_quoted_attribute, encode_safe};
 use html_minifier::minify;
 use serde::{Deserialize, Serialize};
 use sqids::Sqids;
@@ -149,7 +149,9 @@ impl OpenGraphMeta {
           r#type: String::from("launch_frame"),
           name: String::from(self.title.clone()),
           url: self.url.clone(),
-          splash_image_url: "https://lilnouns.wtf/static/media/lil-loading-skull.b7a846e1.gif".parse().unwrap(),
+          splash_image_url: "https://lilnouns.wtf/static/media/lil-loading-skull.b7a846e1.gif"
+            .parse()
+            .unwrap(),
           splash_background_color: String::from("#f7f7f7"),
         },
       },
@@ -157,9 +159,9 @@ impl OpenGraphMeta {
 
     let farcaster_meta = format!(
       r#"
-      <meta property="fc:frame" content='{frame}' />
+      <meta property="fc:frame" content="{frame}" />
       "#,
-      frame = encode_text_minimal(&serde_json::to_string(&frame).unwrap()),
+      frame = encode_double_quoted_attribute(&serde_json::to_string(&frame).unwrap()),
     );
 
     format!(
