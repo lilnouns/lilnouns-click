@@ -3,7 +3,7 @@ use html_minifier::minify;
 use serde::{Deserialize, Serialize};
 use sqids::Sqids;
 use url::Url;
-use worker::{Error, Request, Response, ResponseBody, RouteContext};
+use worker::{Error, Request, Response, ResponseBody, Result, RouteContext};
 
 use crate::{
   handlers::{
@@ -132,7 +132,7 @@ impl OpenGraphMeta {
   }
 }
 
-pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
+pub async fn generate_redirect_page<D>(req: Request, ctx: RouteContext<D>) -> Result<Response> {
   if let Some(sqid) = ctx.param("sqid") {
     let ga_id = ctx.secret("GA_ID")?;
     let decoded = decode_sqid(&sqid).ok_or_else(|| Error::from("Invalid SQID"))?;
@@ -232,7 +232,7 @@ pub async fn handle_redirect<D>(req: Request, ctx: RouteContext<D>) -> worker::R
   Response::error("Bad Request", 400)
 }
 
-pub async fn generate_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker::Result<Response> {
+pub async fn generate_og_image_url<D>(_req: Request, ctx: RouteContext<D>) -> Result<Response> {
   if let Some(sqid) = ctx.param("sqid") {
     let decoded = decode_sqid(&sqid).ok_or_else(|| Error::from("Invalid SQID"))?;
 
@@ -261,10 +261,7 @@ pub async fn generate_og_image<D>(_req: Request, ctx: RouteContext<D>) -> worker
   Response::error("Bad Request", 400)
 }
 
-pub async fn handle_creation<D>(
-  mut req: Request,
-  _ctx: RouteContext<D>,
-) -> worker::Result<Response> {
+pub async fn generate_from_url<D>(mut req: Request, _ctx: RouteContext<D>) -> Result<Response> {
   let sqids = Sqids::default();
   let mut numbers: Vec<u64> = Vec::new();
 
