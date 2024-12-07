@@ -2,8 +2,8 @@ use url::Url;
 use worker::{event, Context, Env, Request, Response, Result, Router};
 
 mod handlers;
+mod helpers;
 mod queries;
-mod utils;
 
 #[event(fetch)]
 async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {

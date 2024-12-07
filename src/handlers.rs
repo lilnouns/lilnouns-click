@@ -10,8 +10,8 @@ use crate::{
     Community::LilNouns,
     Platform::{Ethereum, LilCamp, MetaGov, PropLot},
   },
+  helpers::create_og_image,
   queries::{fetch_lil_nouns_data, fetch_meta_gov_data, fetch_prop_lot_data},
-  utils::create_og_image,
 };
 
 #[derive(Debug, Serialize, Deserialize)]
