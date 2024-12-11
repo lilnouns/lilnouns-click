@@ -1,6 +1,7 @@
 use html_escape::{encode_double_quoted_attribute, encode_safe};
 use html_minifier::minify;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use sqids::Sqids;
 use url::Url;
 use worker::{Error, Request, Response, ResponseBody, Result, RouteContext};
@@ -401,4 +402,52 @@ pub async fn generate_from_url<D>(mut req: Request, _ctx: RouteContext<D>) -> Re
   }
 
   Response::error("Bad Request", 400)
+}
+
+pub async fn generate_farcaster_manifest<D>(
+  mut req: Request,
+  _ctx: RouteContext<D>,
+) -> Result<Response> {
+  let app_url = req
+    .url()
+    .as_ref()
+    .map(|u| u.as_str().to_string())
+    .unwrap_or_default();
+
+  let config = json!({
+    "accountAssociation": {
+      "header": "eyJmaWQiOjE3ODM4LCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4YzE2Rjc0ODQzMDZFY2IzNjFDNjhlMmE3N2YyNThEYWQ2RTc3NTBBOCJ9",
+      "payload": "eyJkb21haW4iOiJkZXYubGlsbm91bnMuY2xpY2sifQ",
+      "signature": "MHgwOTk1OTBlOThhOTI1NDlmY2U0N2U1MjEwYjRiZGMzMTMxNTI4MzcyMzRmNDVkYjEwZDNjMzk3YTExNjljZWJkNDQzZGM5YTFhMWE3NDZjMjg4NDhkNGJiYzE0OWJmYmQyNDBkODk0Y2IzMzJiNjkzNmY0NWY5OTNkYzg1ODMwNjFi"
+    },
+    "frame": {
+      "name": "Example Frame",
+      "version": "0.0.1",
+      "iconUrl": "https://dev.lilnouns.click/icon.png",
+      "homeUrl": "https://dev.lilnouns.click",
+      "splashImageUrl": "https://dev.lilnouns.click/splash.png",
+      "splashBackgroundColor": "#eeccff",
+      "webhookUrl": "https://dev.lilnouns.click/webhook"
+    }
+  });
+
+  //{
+  //   "accountAssociation": {
+  //     "header":
+  // "eyJmaWQiOjE3ODM4LCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4YzE2Rjc0ODQzMDZFY2IzNjFDNjhlMmE3N2YyNThEYWQ2RTc3NTBBOCJ9"
+  // ,     "payload": "eyJkb21haW4iOiJkZXYubGlsbm91bnMuY2xpY2sifQ",
+  //     "signature":
+  // "MHgwOTk1OTBlOThhOTI1NDlmY2U0N2U1MjEwYjRiZGMzMTMxNTI4MzcyMzRmNDVkYjEwZDNjMzk3YTExNjljZWJkNDQzZGM5YTFhMWE3NDZjMjg4NDhkNGJiYzE0OWJmYmQyNDBkODk0Y2IzMzJiNjkzNmY0NWY5OTNkYzg1ODMwNjFi"
+  //   },
+  //   "frame": {
+  //     "name": "Example Frame",
+  //     "version": "0.0.1",
+  //     "iconUrl": "https://example.com/icon.png",
+  //     "homeUrl": "https://example.com",
+  //     "splashImageUrl": "https://example.com/splash.png",
+  //     "splashBackgroundColor": "#eeccff",
+  //     "webhookUrl": "https://example.com/webhook"
+  //   }
+  // }
+  Response::from_json(&config)
 }
