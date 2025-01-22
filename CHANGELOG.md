@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-beta.7] - 2025-01-22
+
+### Revert
+
+- Remove GitHub Actions deployment workflow
+
 ## [1.1.0-beta.6] - 2025-01-22
 
 ### Miscellaneous Tasks
