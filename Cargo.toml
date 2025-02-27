@@ -1,6 +1,6 @@
 [package]
 name = "lilnouns-click"
-version = "1.1.0-beta.8"
+version = "1.1.0-beta.9"
 authors = ["Milad Nekofar <milad@nekofar.com>"]
 edition = "2021"
 description = "A Nounish URL shortener for LilNouns DAO."
@@ -20,16 +20,16 @@ crate-type = ["cdylib"]
 graphql_client = { version = "0.14.0", features = ["reqwest"] }
 html-escape = { version = "0.2.13", default-features = false }
 html-minifier = { version = "5.0.0", default-features = false }
-log = { version = "0.4.25", features = [] }
+log = { version = "0.4.26", features = [] }
 percent-encoding = "2.3.1"
 regex = "1.11.1"
 reqwest = "0.11.26"
-serde = { version = "1.0.217", features = ["derive"] }
+serde = { version = "1.0.218", features = ["derive"] }
 sqids = "0.4.2"
 unidecode = "0.3.0"
 url = "2.5.4"
 worker = "0.5.0"
-serde_json = "1.0.138"
+serde_json = "1.0.139"
 
 [profile.release]
 lto = true
