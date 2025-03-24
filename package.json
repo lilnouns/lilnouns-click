@@ -6,7 +6,7 @@
     "dev": "wrangler dev"
   },
   "devDependencies": {
-    "wrangler": "4.3.0"
+    "wrangler": "4.4.0"
   },
   "resolutions": {
     "undici": ">=5.28.4",
