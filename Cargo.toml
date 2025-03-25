@@ -20,7 +20,7 @@ crate-type = ["cdylib"]
 graphql_client = { version = "0.14.0", features = ["reqwest"] }
 html-escape = { version = "0.2.13", default-features = false }
 html-minifier = { version = "5.0.0", default-features = false }
-log = { version = "0.4.26", features = [] }
+log = { version = "0.4.27", features = [] }
 percent-encoding = "2.3.1"
 regex = "1.11.1"
 reqwest = "0.11.26"
