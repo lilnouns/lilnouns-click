@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0-beta.17] - 2025-11-07
+
+### Miscellaneous Tasks
+
+- Ignore wrangler updates
+
 ## [1.1.0-beta.16] - 2025-11-03
 
 ### Bug Fixes
