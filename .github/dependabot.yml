@@ -73,6 +73,8 @@ updates:
     # Specify labels for pull requests
     labels:
       - 'dependencies'
+    ignore:
+      - dependency-name: 'wrangler'
     # Allow up to 10 open pull requests for dependencies
     open-pull-requests-limit: 20
     # Add reviewers
