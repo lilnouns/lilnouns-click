@@ -29,7 +29,7 @@ sqids = "0.4.2"
 unidecode = "0.3.0"
 url = "2.5.7"
 worker = "0.7.2"
-serde_json = "1.0.146"
+serde_json = "1.0.147"
 
 [profile.release]
 lto = true
