@@ -11,5 +11,6 @@
   "resolutions": {
     "undici": ">=5.28.4",
     "cookie": ">=0.7.0"
-  }
+  },
+  "packageManager": "pnpm@10.27.0"
 }
